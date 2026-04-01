@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Log In — Earthly</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --green-deep: #2D5A3D;
+      --green-mid: #4A7C5C;
+      --green-light: #8FBC8F;
+      --green-pale: #D4E8D0;
+      --green-wash: #EFF6ED;
+      --cream: #FAFAF5;
+      --earth-brown: #8B7355;
+      --text-primary: #2B2B2B;
+      --text-secondary: #5A5A5A;
+      --text-light: #FAFAF5;
+      --white: #FFFFFF;
+      --danger: #B54A4A;
+      --danger-bg: #FDECEC;
+      --success: #2E6B43;
+      --success-bg: #EAF5EC;
+      --shadow-sm: 0 2px 8px rgba(45,90,61,0.08);
+      --shadow-md: 0 4px 20px rgba(45,90,61,0.12);
+      --shadow-lg: 0 8px 40px rgba(45,90,61,0.16);
+      --radius: 12px;
+      --radius-lg: 20px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Source Sans 3', sans-serif;
+      color: var(--text-primary);
+      background: var(--cream);
+      overflow-x: hidden;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 100;
+      padding: 1rem 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(250,250,245,0.9);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(45,90,61,0.05);
+      transition: box-shadow 0.3s ease;
+    }
+
+    nav.scrolled {
+      box-shadow: var(--shadow-sm);
+    }
+
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--green-deep);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.65rem 1.5rem;
+      border-radius: 8px;
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: all 0.25s ease;
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-primary);
+    }
+
+    .btn-ghost:hover {
+      background: var(--green-wash);
+    }
+
+    .btn-primary {
+      background: var(--green-deep);
+      color: var(--text-light);
+    }
+
+    .btn-primary:hover {
+      background: #1E4A2E;
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--green-deep);
+      border: 1.5px solid var(--green-mid);
+    }
+
+    .btn-outline:hover {
+      background: var(--green-deep);
+      color: var(--text-light);
+      border-color: var(--green-deep);
+    }
+
+    .btn-full {
+      width: 100%;
+      padding: 0.95rem 1.25rem;
+      font-size: 1rem;
+      border-radius: 10px;
+    }
+
+    .page {
+      min-height: 100vh;
+      padding: 8.5rem 5% 3rem;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .bg-shape-1,
+    .bg-shape-2 {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .bg-shape-1 {
+      top: 80px;
+      left: -120px;
+      width: 360px;
+      height: 360px;
+      background: var(--green-pale);
+      opacity: 0.28;
+    }
+
+    .bg-shape-2 {
+      bottom: -90px;
+      right: -120px;
+      width: 420px;
+      height: 420px;
+      background: #DCECD8;
+      opacity: 0.35;
+    }
+
+    .login-shell {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 520px;
+    }
+
+    .login-card {
+      background: rgba(255,255,255,0.84);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(45,90,61,0.07);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+      animation: fadeUp 0.7s ease both;
+    }
+
+    .login-image {
+      height: 150px;
+      background:
+        linear-gradient(to top, rgba(35,71,48,0.58), rgba(35,71,48,0.12)),
+        url("https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?auto=format&fit=crop&w=1200&q=80") center/cover no-repeat;
+    }
+
+    .login-content {
+      padding: 2rem;
+    }
+
+    .small-tag {
+      display: inline-block;
+      font-size: 0.76rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1.8px;
+      color: var(--green-mid);
+      margin-bottom: 0.7rem;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.15rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .subtext {
+      color: var(--text-secondary);
+      font-size: 0.98rem;
+      line-height: 1.65;
+      font-weight: 300;
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.45rem;
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    input {
+      width: 100%;
+      padding: 0.95rem 1rem;
+      border-radius: 10px;
+      border: 1px solid rgba(45,90,61,0.15);
+      background: rgba(255,255,255,0.9);
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 0.96rem;
+      color: var(--text-primary);
+      outline: none;
+      transition: all 0.25s ease;
+    }
+
+    input::placeholder {
+      color: #8B8B8B;
+    }
+
+    input:focus {
+      border-color: var(--green-mid);
+      box-shadow: 0 0 0 4px rgba(74,124,92,0.12);
+      background: var(--white);
+    }
+
+    .message {
+      display: none;
+      border-radius: 12px;
+      padding: 0.9rem 1rem;
+      margin-bottom: 1rem;
+      font-size: 0.92rem;
+      line-height: 1.5;
+    }
+
+    .message.error {
+      background: var(--danger-bg);
+      color: var(--danger);
+      border: 1px solid #F3C8C8;
+    }
+
+    .message.success {
+      background: var(--success-bg);
+      color: var(--success);
+      border: 1px solid #CBE4D0;
+    }
+
+    .divider {
+      margin: 1.5rem 0 1rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      color: #8A8A8A;
+      font-size: 0.85rem;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: rgba(45,90,61,0.12);
+    }
+
+    .bottom-link {
+      margin-top: 0.5rem;
+      text-align: center;
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+    }
+
+    .bottom-link a {
+      color: var(--green-deep);
+      font-weight: 600;
+    }
+
+    .page-footer {
+      position: absolute;
+      bottom: 1.25rem;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      font-weight: 300;
+      z-index: 1;
+      width: 100%;
+      padding: 0 1rem;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(18px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <nav id="navbar">
+    <a href="index.html" class="nav-logo">Earthly</a>
+    <div class="nav-links">
+      <a href="login.html" class="btn btn-ghost">Log in</a>
+      <a href="register.html" class="btn btn-primary">Register</a>
+    </div>
+  </nav>
+
+  <main class="page">
+    <div class="bg-shape-1"></div>
+    <div class="bg-shape-2"></div>
+
+    <section class="login-shell">
+      <div class="login-card">
+        <div class="login-image"></div>
+
+        <div class="login-content">
+          <span class="small-tag">Welcome back</span>
+          <h1>Log in to Earthly</h1>
+          <p class="subtext">
+            Access your plant dashboard, care tasks, and watering streak in one place.
+          </p>
+
+          <div id="errorMessage" class="message error"></div>
+          <div id="successMessage" class="message success"></div>
+
+          <form id="loginForm" novalidate>
+            <div class="form-group">
+              <label for="email">Email Address</label>
+              <input type="email" id="email" name="email" placeholder="you@example.com">
+            </div>
+
+            <div class="form-group">
+              <label for="password">Password</label>
+              <input type="password" id="password" name="password" placeholder="Enter your password">
+            </div>
+
+          
+
+            <button type="submit" class="btn btn-primary btn-full">Log In</button>
+          </form>
+
+          <div class="divider">New to Earthly?</div>
+
+          <p class="bottom-link">
+            Don’t have an account? <a href="register.html">Create one here</a>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <p class="page-footer">© 2026 Earthly — Group 6, IT320 Section 77800, King Saud University</p>
+  </main>
+
+  <script>
+    window.addEventListener('scroll', () => {
+      document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 20);
+    });
+
+    const form = document.getElementById('loginForm');
+    const errorMessage = document.getElementById('errorMessage');
+    const successMessage = document.getElementById('successMessage');
+
+    function showError(message) {
+      successMessage.style.display = 'none';
+      errorMessage.textContent = message;
+      errorMessage.style.display = 'block';
+    }
+
+    function showSuccess(message) {
+      errorMessage.style.display = 'none';
+      successMessage.innerHTML = message;
+      successMessage.style.display = 'block';
+    }
+
+    function isValidEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+
+      if (!email || !password) {
+        showError('Please enter your email and password.');
+        return;
+      }
+
+      if (!isValidEmail(email)) {
+        showError('Please enter a valid email address.');
+        return;
+      }
+
+      if (password.length < 6) {
+        showError('Password is incorrect.');
+        return;
+      }
+
+      const isAdmin = email.toLowerCase() === 'admin@earthly.com';
+
+      showSuccess('Login successful. Redirecting to your dashboard...');
+
+      setTimeout(() => {
+        if (isAdmin) {
+          window.location.href = 'admin-dashboard.html';
+        } else {
+          window.location.href = 'user-dashboard.html';
+        }
+      }, 1200);
+    });
+  </script>
+</body>
+</html>

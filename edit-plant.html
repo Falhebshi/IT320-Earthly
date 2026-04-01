@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit Plant — Earthly</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Source+Sans+3:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --green-deep: #2D5A3D;
+            --green-mid: #4A7C5C;
+            --green-light: #8FBC8F;
+            --green-pale: #D4E8D0;
+            --green-wash: #EFF6ED;
+            --cream: #FAFAF5;
+            --text-primary: #2B2B2B;
+            --text-secondary: #5A5A5A;
+            --text-light: #FAFAF5;
+            --white: #FFFFFF;
+            --danger: #B54A4A;
+            --danger-bg: #FDECEC;
+            --success: #2E6B43;
+            --success-bg: #EAF5EC;
+            --border-soft: rgba(45, 90, 61, 0.10);
+            --shadow-sm: 0 2px 8px rgba(45, 90, 61, 0.08);
+            --shadow-md: 0 4px 20px rgba(45, 90, 61, 0.12);
+            --shadow-lg: 0 8px 40px rgba(45, 90, 61, 0.16);
+            --radius: 12px;
+            --radius-lg: 20px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Source Sans 3', sans-serif;
+            color: var(--text-primary);
+            background: var(--cream);
+            overflow-x: hidden;
+        }
+
+        a { text-decoration: none; color: inherit; }
+        button, input, select, textarea { font-family: inherit; }
+        
+        /* ── Breadcrumb ── */
+        .breadcrumb {
+            display: flex; align-items: center; gap: 0.5rem;
+            font-size: 0.9rem; color: var(--text-secondary); font-weight: 400;
+        }
+        .breadcrumb a { color: var(--green-deep); font-weight: 500; transition: opacity 0.2s; }
+        .breadcrumb a:hover { opacity: 0.7; }
+        .breadcrumb .sep { color: var(--text-secondary); opacity: 0.5; }
+
+        /* ── Nav ── */
+        nav {
+            position: fixed; top: 0; width: 100%; z-index: 100;
+            padding: 1rem 5%;
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(250, 250, 245, 0.9);
+            backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+            border-bottom: 1px solid rgba(45, 90, 61, 0.05);
+            transition: box-shadow 0.3s ease;
+        }
+        nav.scrolled { box-shadow: var(--shadow-sm); }
+
+        .nav-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem; font-weight: 600; color: var(--green-deep);
+        }
+        .nav-right { display: flex; align-items: center; gap: 0.55rem; flex-wrap: wrap; }
+
+        .nav-link {
+            padding: 0.65rem 1rem; border-radius: 8px;
+            color: var(--text-primary); font-size: 0.95rem; font-weight: 500;
+            transition: 0.25s ease;
+        }
+        .nav-link:hover, .nav-link.active { background: var(--green-wash); color: var(--green-deep); }
+
+        /* ── Buttons ── */
+        .btn {
+            display: inline-flex; align-items: center; justify-content: center;
+            padding: 0.72rem 1.3rem; border-radius: 8px;
+            font-size: 0.95rem; font-weight: 500; border: none; cursor: pointer;
+            transition: all 0.25s ease;
+        }
+        .btn-primary { background: var(--green-deep); color: var(--text-light); }
+        .btn-primary:hover { background: #1E4A2E; transform: translateY(-1px); box-shadow: var(--shadow-md); }
+
+        .btn-outline { background: transparent; color: var(--green-deep); border: 1.5px solid var(--green-mid); }
+        .btn-outline:hover { background: var(--green-deep); color: var(--text-light); border-color: var(--green-deep); }
+
+        .btn-danger { background: transparent; color: var(--danger); border: 1.5px solid var(--danger); }
+        .btn-danger:hover { background: var(--danger); color: var(--white); }
+
+        .btn-soft { background: var(--green-wash); color: var(--green-deep); }
+        .btn-soft:hover { background: #e3f0df; }
+
+        /* ── Page ── */
+        .page { padding: 7.4rem 5% 3rem; position: relative; min-height: 100vh; }
+
+        .bg-shape-1, .bg-shape-2 {
+            position: absolute; border-radius: 50%; filter: blur(80px);
+            z-index: 0; pointer-events: none;
+        }
+        .bg-shape-1 { top: 40px; left: -120px; width: 360px; height: 360px; background: var(--green-pale); opacity: 0.24; }
+        .bg-shape-2 { bottom: -80px; right: -120px; width: 420px; height: 420px; background: #DCECD8; opacity: 0.34; }
+
+        .layout { position: relative; z-index: 1; max-width: 1220px; margin: 0 auto; display: grid; gap: 1.2rem; }
+
+        .content-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 1.2rem; align-items: start; }
+
+        /* ── Cards ── */
+        .section-card {
+            background: rgba(255, 255, 255, 0.82);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-soft);
+            border-radius: 22px;
+            box-shadow: var(--shadow-lg);
+            padding: 1.4rem;
+        }
+        .section-head { margin-bottom: 1.2rem; }
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.65rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.3rem;
+        }
+        .section-desc { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; font-weight: 300; }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.4rem; line-height: 1.1; font-weight: 700; margin-bottom: 0.7rem;
+        }
+
+        /* ── Messages ── */
+        .message {
+            display: none; border-radius: 14px; padding: 0.95rem 1rem;
+            margin-bottom: 1rem; font-size: 0.93rem; line-height: 1.55;
+        }
+        .message.error { background: var(--danger-bg); color: var(--danger); border: 1px solid #F3C8C8; }
+
+        /* ── Form ── */
+        form { display: grid; gap: 1rem; }
+        .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+        .form-group { display: grid; gap: 0.42rem; }
+
+        label { font-size: 0.92rem; font-weight: 600; color: var(--text-primary); }
+
+        input, select, textarea {
+            width: 100%; padding: 0.95rem 1rem; border-radius: 10px;
+            border: 1px solid rgba(45, 90, 61, 0.15);
+            background: rgba(255, 255, 255, 0.92);
+            font-size: 0.96rem; color: var(--text-primary);
+            outline: none; transition: all 0.25s ease;
+        }
+        textarea { min-height: 115px; resize: vertical; }
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--green-mid);
+            box-shadow: 0 0 0 4px rgba(74, 124, 92, 0.12);
+            background: var(--white);
+        }
+
+        .form-note { margin-top: -0.2rem; font-size: 0.84rem; color: var(--text-secondary); font-weight: 300; }
+
+        .actions-row { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 0.2rem; }
+
+        /* ── Plant Selector ── */
+        .selector-card {
+            background: rgba(255, 255, 255, 0.82);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-soft);
+            border-radius: 22px;
+            box-shadow: var(--shadow-lg);
+            padding: 1.4rem;
+        }
+
+        .plant-selector-wrap { display: flex; gap: 0.9rem; align-items: end; flex-wrap: wrap; }
+        .plant-selector-wrap .form-group { flex: 1; min-width: 220px; }
+        .plant-selector-wrap .btn { margin-bottom: 1px; }
+
+        /* ── Edit Form Area (hidden until plant selected) ── */
+        .edit-area { display: none; }
+        .edit-area.visible { display: grid; gap: 1.2rem; }
+
+        /* ── Empty State ── */
+        .empty-state {
+            text-align: center; padding: 3rem 1.5rem;
+            color: var(--text-secondary);
+        }
+        .empty-state-icon {
+            width: 72px; height: 72px; margin: 0 auto 1rem;
+            border-radius: 50%; background: var(--green-wash);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .empty-state-icon svg { width: 32px; height: 32px; stroke: var(--green-mid); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+        .empty-state h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.25rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.35rem;
+        }
+        .empty-state p { font-size: 0.93rem; font-weight: 300; line-height: 1.6; }
+
+        /* ── Preview ── */
+        .preview-card { display: grid; gap: 1rem; }
+
+        .preview-plant {
+            border-radius: 20px; overflow: hidden; background: var(--white);
+            border: 1px solid rgba(45, 90, 61, 0.08); box-shadow: var(--shadow-sm);
+        }
+        .preview-image-wrap {
+            height: 210px; background: linear-gradient(180deg, #edf4ea, #f8fbf7);
+            display: flex; align-items: center; justify-content: center; overflow: hidden;
+        }
+        .preview-image-wrap img { width: 100%; height: 100%; object-fit: cover; display: none; }
+        .preview-placeholder { color: var(--text-secondary); font-size: 0.95rem; font-weight: 300; }
+
+        .preview-body { padding: 1rem; }
+        .preview-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.35rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.15rem;
+        }
+        .preview-scientific { font-size: 0.92rem; color: var(--text-secondary); font-style: italic; font-weight: 300; margin-bottom: 0.8rem; }
+        .preview-meta { display: grid; gap: 0.45rem; font-size: 0.94rem; color: var(--text-secondary); line-height: 1.55; font-weight: 300; }
+        .preview-meta strong { color: var(--green-deep); font-weight: 600; }
+
+        /* ── Change Indicator Badge ── */
+        .change-badge {
+            display: inline-flex; align-items: center; gap: 0.35rem;
+            padding: 0.3rem 0.75rem; border-radius: 20px;
+            background: #FFF8E6; border: 1px solid #F0DFA0;
+            font-size: 0.8rem; font-weight: 500; color: #8B7020;
+            margin-bottom: 0.8rem;
+        }
+        .change-badge svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+        /* ── Popup Modals ── */
+        .modal-overlay {
+            display: none; position: fixed; inset: 0; z-index: 999;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+            align-items: center; justify-content: center;
+            animation: overlayIn 0.3s ease;
+        }
+        .modal-overlay.visible { display: flex; }
+
+        .modal-box {
+            background: var(--white); border-radius: 24px;
+            padding: 2.4rem 2.2rem 2rem;
+            max-width: 420px; width: 90%; text-align: center;
+            box-shadow: 0 20px 60px rgba(45, 90, 61, 0.22);
+            animation: modalIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .modal-icon {
+            width: 72px; height: 72px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 1.2rem;
+        }
+        .modal-icon.success-icon { background: var(--success-bg); }
+        .modal-icon.danger-icon { background: var(--danger-bg); }
+
+        .modal-icon svg { width: 36px; height: 36px; stroke-width: 2.5; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+        .modal-icon.success-icon svg { stroke: var(--success); }
+        .modal-icon.danger-icon svg { stroke: var(--danger); }
+        .modal-icon svg .check-path { stroke-dasharray: 40; stroke-dashoffset: 40; animation: drawCheck 0.5s ease 0.3s forwards; }
+
+        .modal-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.5rem;
+        }
+        .modal-desc { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; font-weight: 300; margin-bottom: 1.5rem; }
+        .modal-desc strong { color: var(--green-deep); font-weight: 600; }
+
+        .modal-redirect { font-size: 0.84rem; color: var(--text-secondary); font-weight: 300; }
+        .modal-redirect span { font-weight: 600; color: var(--green-deep); }
+
+        .modal-btn {
+            display: inline-flex; align-items: center; justify-content: center;
+            padding: 0.8rem 2rem; border-radius: 10px;
+            font-size: 0.95rem; font-weight: 600; border: none; cursor: pointer;
+            transition: all 0.25s ease; margin-bottom: 1rem;
+        }
+        .modal-btn.primary { background: var(--green-deep); color: var(--text-light); }
+        .modal-btn.primary:hover { background: #1E4A2E; transform: translateY(-1px); box-shadow: var(--shadow-md); }
+        .modal-btn.danger { background: var(--danger); color: var(--white); }
+        .modal-btn.danger:hover { background: #993D3D; transform: translateY(-1px); }
+        .modal-btn.ghost { background: transparent; color: var(--text-secondary); }
+        .modal-btn.ghost:hover { background: var(--green-wash); color: var(--green-deep); }
+
+        .modal-actions { display: flex; gap: 0.6rem; justify-content: center; flex-wrap: wrap; margin-bottom: 0.5rem; }
+
+        /* ── Footer ── */
+        .page-footer {
+            max-width: 1220px; margin: 1.3rem auto 0; text-align: center;
+            color: var(--text-secondary); font-size: 0.82rem; font-weight: 300;
+            position: relative; z-index: 1;
+        }
+
+        @keyframes overlayIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes modalIn { from { opacity: 0; transform: scale(0.9) translateY(20px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+        @keyframes drawCheck { to { stroke-dashoffset: 0; } }
+
+    </style>
+</head>
+
+<body>
+
+    <nav id="navbar">
+        <a href="landing.html" class="nav-logo">Earthly</a>
+        <div class="nav-right">
+            <a href="admin-dashboard.html" class="nav-link active">Admin Dashboard</a>
+            <a href="login.html" class="btn btn-outline">Log out</a>
+        </div>
+    </nav>
+
+    <!-- Success Modal -->
+    <div class="modal-overlay" id="successModal">
+        <div class="modal-box">
+            <div class="modal-icon success-icon">
+                <svg viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="10" stroke-opacity="0.3" />
+                    <polyline points="7 13 10 16 17 9" class="check-path" />
+                </svg>
+            </div>
+            <h2 class="modal-title">Changes Saved!</h2>
+            <p class="modal-desc">
+                <strong id="modalPlantName">Plant</strong> has been updated successfully in the catalog.
+            </p>
+            <button class="modal-btn primary" id="modalGoBtn">Go to Admin Dashboard</button>
+            <p class="modal-redirect">Redirecting automatically in <span id="countdown">5</span>s</p>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal-overlay" id="deleteModal">
+        <div class="modal-box">
+            <div class="modal-icon danger-icon">
+                <svg viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="10" stroke-opacity="0.3" />
+                    <line x1="15" y1="9" x2="9" y2="15" />
+                    <line x1="9" y1="9" x2="15" y2="15" />
+                </svg>
+            </div>
+            <h2 class="modal-title">Delete Plant?</h2>
+            <p class="modal-desc">
+                Are you sure you want to remove <strong id="deletePlantName">this plant</strong> from the catalog? This action cannot be undone.
+            </p>
+            <div class="modal-actions">
+                <button class="modal-btn danger" id="confirmDeleteBtn">Yes, Delete</button>
+                <button class="modal-btn ghost" id="cancelDeleteBtn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Success Modal -->
+    <div class="modal-overlay" id="deleteSuccessModal">
+        <div class="modal-box">
+            <div class="modal-icon success-icon">
+                <svg viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="10" stroke-opacity="0.3" />
+                    <polyline points="7 13 10 16 17 9" class="check-path" />
+                </svg>
+            </div>
+            <h2 class="modal-title">Plant Deleted</h2>
+            <p class="modal-desc">
+                The plant has been removed from the catalog.
+            </p>
+            <button class="modal-btn primary" id="deleteSuccessGoBtn">Go to Admin Dashboard</button>
+            <p class="modal-redirect">Redirecting automatically in <span id="deleteCountdown">5</span>s</p>
+        </div>
+    </div>
+
+    <main class="page">
+        <div class="bg-shape-1"></div>
+        <div class="bg-shape-2"></div>
+
+        <section class="layout">
+            <div class="breadcrumb">
+                <a href="admin-dashboard.html">Admin Dashboard</a>
+                <span class="sep">›</span>
+                <span id="breadcrumbName">Edit Plant</span>
+            </div>
+            <h1>Edit plant information</h1>
+
+            <!-- Plant Selector -->
+            <div class="selector-card">
+                <div class="section-head">
+                    <h2 class="section-title">Select a plant</h2>
+                    <p class="section-desc">Choose a plant from the catalog to view and update its information.</p>
+                </div>
+                <div class="plant-selector-wrap">
+                    <div class="form-group">
+                        <label for="plantSelect">Plant</label>
+                        <select id="plantSelect">
+                            <option value="">— Choose a plant —</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary" id="loadPlantBtn" type="button">Load Plant</button>
+                </div>
+            </div>
+
+            <!-- Empty State (shown when no plant loaded) -->
+            <div class="empty-state" id="emptyState">
+                <div class="empty-state-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" stroke-opacity="0.3" />
+                        <path d="M12 8c-2.2 0-4 1.8-4 4m4-4c2.2 0 4 1.8 4 4m-4-4v0m-4 4h8" />
+                        <path d="M9 16c.8.8 1.8 1.2 3 1.2s2.2-.4 3-1.2" />
+                    </svg>
+                </div>
+                <h3>No plant selected</h3>
+                <p>Select a plant from the dropdown above to start editing its details.</p>
+            </div>
+
+            <!-- Edit Area (shown after plant is loaded) -->
+            <div class="edit-area" id="editArea">
+                <section class="content-grid">
+                    <section class="section-card">
+                        <div class="section-head">
+                            <h2 class="section-title">Plant details</h2>
+                            <p class="section-desc">
+                                Update the fields below. Changes will be saved when you click "Save Changes".
+                            </p>
+                        </div>
+
+                        <div id="changeBadge" class="change-badge" style="display:none;">
+                            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                            <span>You have unsaved changes</span>
+                        </div>
+
+                        <div id="errorMessage" class="message error"></div>
+
+                        <form id="editPlantForm" novalidate>
+                            <div class="field-row">
+                                <div class="form-group">
+                                    <label for="commonName">Common Name</label>
+                                    <input type="text" id="commonName" placeholder="e.g. Snake Plant">
+                                </div>
+                                <div class="form-group">
+                                    <label for="scientificName">Scientific Name</label>
+                                    <input type="text" id="scientificName" placeholder="e.g. Dracaena trifasciata">
+                                </div>
+                            </div>
+
+                            <div class="field-row">
+                                <div class="form-group">
+                                    <label for="category">Category</label>
+                                    <select id="category">
+                                        <option value="">Select a category</option>
+                                        <option>Indoor plant</option>
+                                        <option>Tropical plant</option>
+                                        <option>Trailing plant</option>
+                                        <option>Succulent</option>
+                                        <option>Low-maintenance plant</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="difficulty">Difficulty Level</label>
+                                    <select id="difficulty">
+                                        <option value="">Select difficulty</option>
+                                        <option>Beginner-friendly</option>
+                                        <option>Intermediate</option>
+                                        <option>Advanced</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="field-row">
+                                <div class="form-group">
+                                    <label for="watering">Watering Frequency</label>
+                                    <input type="text" id="watering" placeholder="e.g. Every 7–10 days">
+                                </div>
+                                <div class="form-group">
+                                    <label for="light">Light Requirements</label>
+                                    <input type="text" id="light" placeholder="e.g. Bright indirect light">
+                                </div>
+                            </div>
+
+                            <div class="field-row">
+                                <div class="form-group">
+                                    <label for="petSafe">Pet Safety</label>
+                                    <select id="petSafe">
+                                        <option value="">Select pet safety</option>
+                                        <option>Pet safe</option>
+                                        <option>Not pet safe</option>
+                                        <option>Unknown</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="plantImage">Replace Image</label>
+                                    <input type="file" id="plantImage" accept="image/*">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="careTip">Short Care Tip</label>
+                                <textarea id="careTip" placeholder="Write a short, simple tip for beginner users."></textarea>
+                            </div>
+
+                            <p class="form-note">
+                                Only update what needs changing — all other fields will remain as they were.
+                            </p>
+
+                            <div class="actions-row">
+                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                                <button type="button" class="btn btn-danger" id="deletePlantBtn">Delete Plant</button>
+                                <a href="admin-dashboard.html" class="btn btn-outline">Back to Admin Panel</a>
+                            </div>
+                        </form>
+                    </section>
+
+                    <section class="section-card">
+                        <div class="section-head">
+                            <h2 class="section-title">Live preview</h2>
+                            <p class="section-desc">
+                                See how the updated plant entry will look in the catalog.
+                            </p>
+                        </div>
+
+                        <div class="preview-card">
+                            <article class="preview-plant">
+                                <div class="preview-image-wrap">
+                                    <img id="previewImage" alt="Plant preview">
+                                    <span id="previewPlaceholder" class="preview-placeholder">Plant image preview</span>
+                                </div>
+                                <div class="preview-body">
+                                    <h3 class="preview-name" id="previewName">Plant Name</h3>
+                                    <p class="preview-scientific" id="previewScientific">Scientific name</p>
+                                    <div class="preview-meta">
+                                        <span><strong>Category:</strong> <span id="previewCategory">—</span></span>
+                                        <span><strong>Difficulty:</strong> <span id="previewDifficulty">—</span></span>
+                                        <span><strong>Watering:</strong> <span id="previewWatering">—</span></span>
+                                        <span><strong>Light:</strong> <span id="previewLight">—</span></span>
+                                        <span><strong>Pet Safety:</strong> <span id="previewPetSafe">—</span></span>
+                                        <span><strong>Tip:</strong> <span id="previewTip">—</span></span>
+                                    </div>
+                                </div>
+                            </article>
+                        </div>
+                    </section>
+                </section>
+            </div>
+        </section>
+
+        <p class="page-footer">© 2026 Earthly — Group 6, IT320 Section 77800, King Saud University</p>
+    </main>
+
+    <script>
+        /* ── Scroll shadow ── */
+        window.addEventListener('scroll', () => {
+            document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 20);
+        });
+
+        /* ── Sample plant data (simulates database) ── */
+        const plantData = [
+            {
+                id: 1,
+                commonName: "Snake Plant",
+                scientificName: "Dracaena trifasciata",
+                category: "Indoor plant",
+                difficulty: "Beginner-friendly",
+                watering: "Every 14–21 days",
+                light: "Low to bright indirect light",
+                petSafe: "Not pet safe",
+                careTip: "Let the soil dry out completely between waterings. Overwatering is the most common mistake.",
+                image: ""
+            },
+            {
+                id: 2,
+                commonName: "Pothos",
+                scientificName: "Epipremnum aureum",
+                category: "Trailing plant",
+                difficulty: "Beginner-friendly",
+                watering: "Every 7–10 days",
+                light: "Low to bright indirect light",
+                petSafe: "Not pet safe",
+                careTip: "Trim leggy vines to encourage fuller growth. Thrives in almost any indoor condition.",
+                image: ""
+            },
+            {
+                id: 3,
+                commonName: "Monstera",
+                scientificName: "Monstera deliciosa",
+                category: "Tropical plant",
+                difficulty: "Intermediate",
+                watering: "Every 7–10 days",
+                light: "Bright indirect light",
+                petSafe: "Not pet safe",
+                careTip: "Wipe leaves regularly to keep them dust-free. Provide a moss pole for climbing support.",
+                image: ""
+            },
+            {
+                id: 4,
+                commonName: "Aloe Vera",
+                scientificName: "Aloe barbadensis miller",
+                category: "Succulent",
+                difficulty: "Beginner-friendly",
+                watering: "Every 14–21 days",
+                light: "Bright direct or indirect light",
+                petSafe: "Not pet safe",
+                careTip: "Use well-draining soil and avoid letting water sit in the rosette.",
+                image: ""
+            },
+            {
+                id: 5,
+                commonName: "Boston Fern",
+                scientificName: "Nephrolepis exaltata",
+                category: "Indoor plant",
+                difficulty: "Intermediate",
+                watering: "Every 3–5 days",
+                light: "Bright indirect light, no direct sun",
+                petSafe: "Pet safe",
+                careTip: "Mist the fronds regularly to keep humidity high, especially in dry rooms.",
+                image: ""
+            },
+            {
+                id: 6,
+                commonName: "Spider Plant",
+                scientificName: "Chlorophytum comosum",
+                category: "Low-maintenance plant",
+                difficulty: "Beginner-friendly",
+                watering: "Every 7–10 days",
+                light: "Bright indirect light",
+                petSafe: "Pet safe",
+                careTip: "Hang it in a basket and let the baby spiderettes trail down for a beautiful display.",
+                image: ""
+            }
+        ];
+
+        /* ── Populate dropdown ── */
+        const plantSelect = document.getElementById('plantSelect');
+        plantData.forEach(plant => {
+            const opt = document.createElement('option');
+            opt.value = plant.id;
+            opt.textContent = `${plant.commonName} — ${plant.scientificName}`;
+            plantSelect.appendChild(opt);
+        });
+
+        /* ── DOM refs ── */
+        const loadPlantBtn = document.getElementById('loadPlantBtn');
+        const emptyState = document.getElementById('emptyState');
+        const editArea = document.getElementById('editArea');
+        const form = document.getElementById('editPlantForm');
+        const errorMessage = document.getElementById('errorMessage');
+        const changeBadge = document.getElementById('changeBadge');
+
+        const commonName = document.getElementById('commonName');
+        const scientificName = document.getElementById('scientificName');
+        const category = document.getElementById('category');
+        const difficulty = document.getElementById('difficulty');
+        const watering = document.getElementById('watering');
+        const light = document.getElementById('light');
+        const petSafe = document.getElementById('petSafe');
+        const plantImage = document.getElementById('plantImage');
+        const careTip = document.getElementById('careTip');
+
+        const previewName = document.getElementById('previewName');
+        const previewScientific = document.getElementById('previewScientific');
+        const previewCategory = document.getElementById('previewCategory');
+        const previewDifficulty = document.getElementById('previewDifficulty');
+        const previewWatering = document.getElementById('previewWatering');
+        const previewLight = document.getElementById('previewLight');
+        const previewPetSafe = document.getElementById('previewPetSafe');
+        const previewTip = document.getElementById('previewTip');
+        const previewImage = document.getElementById('previewImage');
+        const previewPlaceholder = document.getElementById('previewPlaceholder');
+
+        let currentPlant = null;
+        let originalValues = {};
+
+        /* ── Load plant into form ── */
+        function loadPlant(plant) {
+            currentPlant = plant;
+
+            commonName.value = plant.commonName;
+            scientificName.value = plant.scientificName;
+            category.value = plant.category;
+            difficulty.value = plant.difficulty;
+            watering.value = plant.watering;
+            light.value = plant.light;
+            petSafe.value = plant.petSafe;
+            careTip.value = plant.careTip;
+            plantImage.value = '';
+
+            originalValues = {
+                commonName: plant.commonName,
+                scientificName: plant.scientificName,
+                category: plant.category,
+                difficulty: plant.difficulty,
+                watering: plant.watering,
+                light: plant.light,
+                petSafe: plant.petSafe,
+                careTip: plant.careTip
+            };
+
+            changeBadge.style.display = 'none';
+            errorMessage.style.display = 'none';
+
+            previewImage.style.display = 'none';
+            previewPlaceholder.style.display = 'block';
+
+            updatePreview();
+
+            emptyState.style.display = 'none';
+            editArea.classList.add('visible');
+            editArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        loadPlantBtn.addEventListener('click', () => {
+            const id = parseInt(plantSelect.value);
+            const plant = plantData.find(p => p.id === id);
+            if (!plant) return;
+            loadPlant(plant);
+        });
+
+        /* ── Live preview ── */
+        function updatePreview() {
+            previewName.textContent = commonName.value.trim() || 'Plant Name';
+            previewScientific.textContent = scientificName.value.trim() || 'Scientific name';
+            previewCategory.textContent = category.value || '—';
+            previewDifficulty.textContent = difficulty.value || '—';
+            previewWatering.textContent = watering.value.trim() || '—';
+            previewLight.textContent = light.value.trim() || '—';
+            previewPetSafe.textContent = petSafe.value || '—';
+            previewTip.textContent = careTip.value.trim() || '—';
+
+            const file = plantImage.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    previewImage.src = e.target.result;
+                    previewImage.style.display = 'block';
+                    previewPlaceholder.style.display = 'none';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        /* ── Detect unsaved changes ── */
+        function checkChanges() {
+            if (!currentPlant) return;
+            const changed =
+                commonName.value !== originalValues.commonName ||
+                scientificName.value !== originalValues.scientificName ||
+                category.value !== originalValues.category ||
+                difficulty.value !== originalValues.difficulty ||
+                watering.value !== originalValues.watering ||
+                light.value !== originalValues.light ||
+                petSafe.value !== originalValues.petSafe ||
+                careTip.value !== originalValues.careTip ||
+                plantImage.files.length > 0;
+
+            changeBadge.style.display = changed ? 'inline-flex' : 'none';
+        }
+
+        [commonName, scientificName, category, difficulty, watering, light, petSafe, careTip]
+            .forEach(field => field.addEventListener('input', () => { updatePreview(); checkChanges(); }));
+        plantImage.addEventListener('change', () => { updatePreview(); checkChanges(); });
+
+        /* ── Save form ── */
+        function showError(msg) {
+            errorMessage.textContent = msg;
+            errorMessage.style.display = 'block';
+        }
+
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            errorMessage.style.display = 'none';
+
+            if (
+                !commonName.value.trim() ||
+                !scientificName.value.trim() ||
+                !category.value ||
+                !watering.value.trim() ||
+                !light.value.trim()
+            ) {
+                showError('Please fill in all required plant details before saving.');
+                return;
+            }
+
+            showSuccessPopup(commonName.value.trim());
+        });
+
+        /* ── Success Popup ── */
+        const successModal = document.getElementById('successModal');
+        const modalPlantName = document.getElementById('modalPlantName');
+        const modalGoBtn = document.getElementById('modalGoBtn');
+        const countdownEl = document.getElementById('countdown');
+        let countdownTimer = null;
+
+        function showSuccessPopup(name) {
+            modalPlantName.textContent = name;
+            successModal.classList.add('visible');
+            let seconds = 5;
+            countdownEl.textContent = seconds;
+            countdownTimer = setInterval(() => {
+                seconds--;
+                countdownEl.textContent = seconds;
+                if (seconds <= 0) { clearInterval(countdownTimer); window.location.href = 'admin-dashboard.html'; }
+            }, 1000);
+        }
+
+        modalGoBtn.addEventListener('click', () => { clearInterval(countdownTimer); window.location.href = 'admin-dashboard.html'; });
+
+        /* ── Delete Flow ── */
+        const deleteModal = document.getElementById('deleteModal');
+        const deletePlantName = document.getElementById('deletePlantName');
+        const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+        const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+        const deletePlantBtn = document.getElementById('deletePlantBtn');
+
+        const deleteSuccessModal = document.getElementById('deleteSuccessModal');
+        const deleteSuccessGoBtn = document.getElementById('deleteSuccessGoBtn');
+        const deleteCountdownEl = document.getElementById('deleteCountdown');
+        let deleteCountdownTimer = null;
+
+        deletePlantBtn.addEventListener('click', () => {
+            if (!currentPlant) return;
+            deletePlantName.textContent = currentPlant.commonName;
+            deleteModal.classList.add('visible');
+        });
+
+        cancelDeleteBtn.addEventListener('click', () => { deleteModal.classList.remove('visible'); });
+
+        confirmDeleteBtn.addEventListener('click', () => {
+            deleteModal.classList.remove('visible');
+            deleteSuccessModal.classList.add('visible');
+
+            let seconds = 5;
+            deleteCountdownEl.textContent = seconds;
+            deleteCountdownTimer = setInterval(() => {
+                seconds--;
+                deleteCountdownEl.textContent = seconds;
+                if (seconds <= 0) { clearInterval(deleteCountdownTimer); window.location.href = 'admin-dashboard.html'; }
+            }, 1000);
+        });
+
+        deleteSuccessGoBtn.addEventListener('click', () => { clearInterval(deleteCountdownTimer); window.location.href = 'admin-dashboard.html'; });
+    </script>
+</body>
+
+</html>

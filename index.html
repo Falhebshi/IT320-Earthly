@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Earthly — Plant Care Made Simple</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --green-deep: #2D5A3D;
+      --green-mid: #4A7C5C;
+      --green-light: #8FBC8F;
+      --green-pale: #D4E8D0;
+      --green-wash: #EFF6ED;
+      --cream: #FAFAF5;
+      --earth-brown: #8B7355;
+      --text-primary: #2B2B2B;
+      --text-secondary: #5A5A5A;
+      --text-light: #FAFAF5;
+      --white: #FFFFFF;
+      --shadow-sm: 0 2px 8px rgba(45,90,61,0.08);
+      --shadow-md: 0 4px 20px rgba(45,90,61,0.12);
+      --shadow-lg: 0 8px 40px rgba(45,90,61,0.16);
+      --radius: 12px;
+      --radius-lg: 20px;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Source Sans 3', sans-serif;
+      color: var(--text-primary);
+      background: var(--cream);
+      overflow-x: hidden;
+    }
+
+    /* NAVBAR */
+    nav {
+      position: fixed; top: 0; width: 100%; z-index: 100;
+      padding: 1rem 5%;
+      display: flex; justify-content: space-between; align-items: center;
+      background: rgba(250,250,245,0.9);
+      backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(45,90,61,0.05);
+      transition: box-shadow 0.3s ease;
+    }
+    nav.scrolled { box-shadow: var(--shadow-sm); }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem; font-weight: 600;
+      color: var(--green-deep); text-decoration: none;
+    }
+    .nav-links { display: flex; align-items: center; gap: 0.5rem; }
+
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      padding: 0.6rem 1.5rem; border-radius: 8px;
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 0.9rem; font-weight: 500;
+      text-decoration: none; cursor: pointer; border: none;
+      transition: all 0.25s ease;
+    }
+    .btn-ghost { background: transparent; color: var(--text-primary); }
+    .btn-ghost:hover { background: var(--green-wash); }
+    .btn-primary { background: var(--green-deep); color: var(--text-light); }
+    .btn-primary:hover { background: #1E4A2E; transform: translateY(-1px); box-shadow: var(--shadow-md); }
+    .btn-outline { background: transparent; color: var(--green-deep); border: 1.5px solid var(--green-mid); }
+    .btn-outline:hover { background: var(--green-deep); color: var(--text-light); border-color: var(--green-deep); }
+    .btn-lg { padding: 0.8rem 2rem; font-size: 0.95rem; }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh; display: flex; align-items: center;
+      padding: 7rem 5% 4rem; position: relative;
+    }
+    .hero-bg-shape {
+      position: absolute; top: -80px; right: -120px;
+      width: 550px; height: 550px;
+      background: var(--green-pale); border-radius: 50%;
+      opacity: 0.25; filter: blur(80px); z-index: 0;
+    }
+    .hero-content {
+      max-width: 1160px; margin: 0 auto; width: 100%;
+      display: grid; grid-template-columns: 1.1fr 1fr;
+      gap: 3rem; align-items: center;
+      position: relative; z-index: 1;
+    }
+    .hero-text { animation: fadeUp 0.7s ease both; }
+    .hero-tag {
+      display: inline-block; font-size: 0.78rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 1.5px;
+      color: var(--green-mid); margin-bottom: 1.2rem;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 3.2rem; line-height: 1.15;
+      color: var(--text-primary); margin-bottom: 1.2rem; font-weight: 700;
+    }
+    .hero h1 em { color: var(--green-deep); font-style: italic; }
+    .hero-desc {
+      font-size: 1.08rem; line-height: 1.7; color: var(--text-secondary);
+      margin-bottom: 2rem; max-width: 460px; font-weight: 300;
+    }
+    .hero-buttons { display: flex; gap: 0.7rem; flex-wrap: wrap; }
+
+    /* Hero cards */
+    .hero-visual {
+      display: flex; justify-content: center; align-items: center;
+      animation: fadeUp 0.7s ease 0.15s both;
+    }
+    .card-stack { position: relative; width: 330px; height: 430px; }
+    .pcard {
+      position: absolute; width: 270px;
+      background: var(--white); border-radius: 16px;
+      overflow: hidden; box-shadow: 0 6px 30px rgba(0,0,0,0.1);
+    }
+    .pcard:nth-child(1) { z-index:3; top:0; left:20px; transform:rotate(-1.5deg); }
+    .pcard:nth-child(2) { z-index:2; top:35px; left:55px; transform:rotate(2.5deg); opacity:0.6; }
+    .pcard:nth-child(3) { z-index:1; top:65px; left:5px; transform:rotate(-4deg); opacity:0.35; }
+    .pcard-img { width:100%; height:250px; object-fit:cover; display:block; }
+    .pcard-body { padding: 1rem 1.1rem 1.1rem; }
+    .pcard-body h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem; color: var(--text-primary); margin-bottom: 0.2rem;
+    }
+    .pcard-body .botanical {
+      font-size: 0.78rem; color: var(--text-secondary);
+      font-style: italic; font-weight: 300; margin-bottom: 0.7rem;
+    }
+    .pcard-tags { display: flex; gap: 0.35rem; }
+    .ptag {
+      font-size: 0.7rem; padding: 0.2rem 0.55rem;
+      border-radius: 6px; font-weight: 500;
+    }
+    .ptag.water { background: #E8F4FD; color: #2D7BBF; }
+    .ptag.sun   { background: #FEF7E0; color: #C78D20; }
+    .ptag.easy  { background: var(--green-wash); color: var(--green-mid); }
+
+    /* FEATURES */
+    .features {
+      padding: 5.5rem 5%; background: var(--white);
+      border-top: 1px solid rgba(0,0,0,0.04);
+    }
+    .features-inner { max-width: 1060px; margin: 0 auto; }
+    .section-tag {
+      font-size: 0.76rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 1.8px;
+      color: var(--green-mid); margin-bottom: 0.7rem;
+    }
+    .section-heading {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.1rem; color: var(--text-primary);
+      margin-bottom: 0.8rem; font-weight: 600;
+    }
+    .section-desc {
+      font-size: 1rem; color: var(--text-secondary); font-weight: 300;
+      max-width: 500px; line-height: 1.65; margin-bottom: 3rem;
+    }
+    .feat-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; }
+    .feat-card {
+      padding: 1.8rem; border-radius: 14px;
+      border: 1px solid rgba(0,0,0,0.06); background: var(--cream);
+      transition: all 0.3s ease;
+    }
+    .feat-card:hover {
+      transform: translateY(-3px); box-shadow: var(--shadow-md);
+      border-color: var(--green-pale);
+    }
+    .feat-ico {
+      width: 44px; height: 44px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 1rem; font-size: 1.2rem;
+    }
+    .feat-ico.a { background: var(--green-wash); }
+    .feat-ico.b { background: #FEF7E0; }
+    .feat-ico.c { background: #FDE9E9; }
+    .feat-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem; color: var(--text-primary);
+      margin-bottom: 0.5rem; font-weight: 600;
+    }
+    .feat-card p {
+      font-size: 0.88rem; color: var(--text-secondary);
+      line-height: 1.6; font-weight: 300;
+    }
+
+    /* HOW IT WORKS */
+    .steps-section {
+      padding: 5.5rem 5%; background: var(--green-deep);
+      color: var(--text-light); position: relative; overflow: hidden;
+    }
+    .steps-section::after {
+      content:''; position:absolute;
+      bottom:-100px; right:-80px; width:350px; height:350px;
+      background: rgba(143,188,143,0.1); border-radius:50%; filter:blur(60px);
+    }
+    .steps-inner { max-width: 1060px; margin: 0 auto; position: relative; z-index: 1; }
+    .steps-section .section-tag { color: var(--green-light); }
+    .steps-section .section-heading { color: var(--text-light); }
+    .steps-section .section-desc { color: rgba(255,255,255,0.6); }
+    .steps-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 2rem; }
+    .step-item { text-align: center; }
+    .step-num {
+      width: 42px; height: 42px; border-radius: 50%;
+      border: 1.5px solid var(--green-light);
+      display: inline-flex; align-items: center; justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem; color: var(--green-light); margin-bottom: 1rem;
+    }
+    .step-item h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem; font-weight: 500; margin-bottom: 0.5rem;
+    }
+    .step-item p {
+      font-size: 0.88rem; line-height: 1.6;
+      color: rgba(255,255,255,0.6); font-weight: 300;
+      max-width: 280px; margin: 0 auto;
+    }
+
+    /* CTA */
+    .cta { padding: 5.5rem 5%; text-align: center; }
+    .cta-box { max-width: 540px; margin: 0 auto; }
+    .cta-box .section-heading { margin-bottom: 0.8rem; }
+    .cta-box p {
+      font-size: 1rem; color: var(--text-secondary); font-weight: 300;
+      line-height: 1.6; margin-bottom: 1.8rem;
+    }
+
+    /* FOOTER */
+    footer {
+      padding: 1.8rem 5%; text-align: center;
+      border-top: 1px solid rgba(0,0,0,0.05);
+    }
+    footer p { font-size: 0.8rem; color: var(--text-secondary); font-weight: 300; }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity:0; transform:translateY(20px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+    .reveal {
+      opacity:0; transform:translateY(18px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+  </style>
+</head>
+<body>
+
+  <nav id="navbar">
+    <a href="index.html" class="nav-logo">Earthly</a>
+    <div class="nav-links">
+      <a href="login.html" class="btn btn-ghost">Log in</a>
+      <a href="register.html" class="btn btn-primary">Register</a>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-bg-shape"></div>
+    <div class="hero-content">
+      <div class="hero-text">
+        <span class="hero-tag">Free &amp; beginner-friendly</span>
+        <h1>Plant care,<br><em>simplified.</em></h1>
+        <p class="hero-desc">Discover plants, track your care routines, and build lasting green habits — all in one place. Designed for beginners who want their plants to thrive.</p>
+        <div class="hero-buttons">
+          <a href="register.html" class="btn btn-primary btn-lg">Get Started</a>
+          <a href="login.html" class="btn btn-outline btn-lg">Log In</a>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="card-stack">
+          <div class="pcard">
+            <img class="pcard-img" src="images/snake-plant.png" alt="Snake Plant">
+            <div class="pcard-body">
+              <h3>Snake Plant</h3>
+              <p class="botanical">Dracaena trifasciata</p>
+              <div class="pcard-tags">
+                <span class="ptag water">Weekly</span>
+                <span class="ptag sun">Indirect light</span>
+                <span class="ptag easy">Beginner</span>
+              </div>
+            </div>
+          </div>
+          <div class="pcard">
+            <img class="pcard-img" src="https://images.unsplash.com/photo-1637967886160-fd78dc3ce3f5?w=400&h=300&fit=crop&q=80" alt="Pothos">
+            <div class="pcard-body">
+              <h3>Pothos</h3>
+              <p class="botanical">Epipremnum aureum</p>
+            </div>
+          </div>
+          <div class="pcard">
+            <img class="pcard-img" src="https://bostan.com.sa/cdn/shop/files/corn-plant-dracaena-fragrans-massangeana-7277249.webp?v=1769162285&width=1500" alt="Peace Lily">
+            <div class="pcard-body">
+              <h3>Peace Lily</h3>
+              <p class="botanical">Spathiphyllum</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="features">
+    <div class="features-inner">
+      <p class="section-tag">Why Earthly?</p>
+      <h2 class="section-heading">Everything your plants need,<br>nothing you don't.</h2>
+      <p class="section-desc">No subscriptions, no complex hardware. Just clear guidance for healthier plants.</p>
+      <div class="feat-grid">
+        <div class="feat-card reveal">
+          <div class="feat-ico a">📖</div>
+          <h3>Plant Catalog</h3>
+          <p>Browse a structured collection of plants with clear care instructions, watering frequency, and light requirements.</p>
+        </div>
+        <div class="feat-card reveal">
+          <div class="feat-ico b">🌱</div>
+          <h3>My Plants</h3>
+          <p>Save plants to your personal collection, add nicknames and notes, and view your care tasks from a simple dashboard.</p>
+        </div>
+        <div class="feat-card reveal">
+          <div class="feat-ico c">🔥</div>
+          <h3>Watering Streaks</h3>
+          <p>Stay motivated with a daily streak system that rewards consistency and helps you build long-term care habits.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="steps-section">
+    <div class="steps-inner">
+      <p class="section-tag">How it works</p>
+      <h2 class="section-heading">Three steps to greener living</h2>
+      <p class="section-desc">Getting started takes less than a minute.</p>
+      <div class="steps-row">
+        <div class="step-item reveal">
+          <div class="step-num">1</div>
+          <h3>Create your account</h3>
+          <p>Sign up for free and set up your personal plant dashboard in seconds.</p>
+        </div>
+        <div class="step-item reveal">
+          <div class="step-num">2</div>
+          <h3>Explore &amp; collect</h3>
+          <p>Browse the catalog, learn about each plant's needs, and add favorites to your collection.</p>
+        </div>
+        <div class="step-item reveal">
+          <div class="step-num">3</div>
+          <h3>Care &amp; grow</h3>
+          <p>Follow your daily tasks, mark them done, and watch your watering streak grow.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="cta-box">
+      <p class="section-tag">Ready?</p>
+      <h2 class="section-heading">Start your plant care journey</h2>
+      <p>Join Earthly and give your plants the care they deserve — one day at a time.</p>
+      <a href="register.html" class="btn btn-primary btn-lg">Create Free Account</a>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2026 Earthly — Group 6, IT320 Section 77800, King Saud University</p>
+  </footer>
+
+  <script>
+    window.addEventListener('scroll', () => {
+      document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 20);
+    });
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+  </script>
+</body>
+</html>
