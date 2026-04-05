@@ -247,12 +247,28 @@
 
         /* ── Breadcrumb ── */
         .breadcrumb {
-            display: flex; align-items: center; gap: 0.5rem;
-            font-size: 0.9rem; color: var(--text-secondary); font-weight: 400;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-weight: 400;
         }
-        .breadcrumb a { color: var(--green-deep); font-weight: 500; transition: opacity 0.2s; }
-        .breadcrumb a:hover { opacity: 0.7; }
-        .breadcrumb .sep { color: var(--text-secondary); opacity: 0.5; }
+
+        .breadcrumb a {
+            color: var(--green-deep);
+            font-weight: 500;
+            transition: opacity 0.2s;
+        }
+
+        .breadcrumb a:hover {
+            opacity: 0.7;
+        }
+
+        .breadcrumb .sep {
+            color: var(--text-secondary);
+            opacity: 0.5;
+        }
 
 
         .content-grid {
@@ -580,8 +596,13 @@
         }
 
         @keyframes overlayIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
 
         @keyframes modalIn {
@@ -589,6 +610,7 @@
                 opacity: 0;
                 transform: scale(0.9) translateY(20px);
             }
+
             to {
                 opacity: 1;
                 transform: scale(1) translateY(0);
@@ -596,10 +618,10 @@
         }
 
         @keyframes drawCheck {
-            to { stroke-dashoffset: 0; }
+            to {
+                stroke-dashoffset: 0;
+            }
         }
-
-        
     </style>
 </head>
 
@@ -614,7 +636,7 @@
         </div>
     </nav>
 
-    
+
 
     <!-- Success Popup Modal -->
     <div class="modal-overlay" id="successModal">
@@ -696,6 +718,18 @@
 
                         <div class="field-row">
                             <div class="form-group">
+                                <label for="origin">Origin</label>
+                                <input type="text" id="origin" placeholder="e.g. West Africa">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="plantImage">Plant Image</label>
+                                <input type="file" id="plantImage" accept="image/*">
+                            </div>
+                        </div>
+
+                        <div class="field-row">
+                            <div class="form-group">
                                 <label for="watering">Watering Frequency</label>
                                 <input type="text" id="watering" placeholder="e.g. Every 7–10 days">
                             </div>
@@ -708,19 +742,30 @@
 
                         <div class="field-row">
                             <div class="form-group">
-                                <label for="petSafe">Pet Safety</label>
-                                <select id="petSafe">
-                                    <option value="">Select pet safety</option>
-                                    <option>Pet safe</option>
-                                    <option>Not pet safe</option>
-                                    <option>Unknown</option>
-                                </select>
+                                <label for="soilType">Soil Type</label>
+                                <input type="text" id="soilType" placeholder="e.g. Well-draining potting mix">
                             </div>
 
                             <div class="form-group">
-                                <label for="plantImage">Plant Image</label>
-                                <input type="file" id="plantImage" accept="image/*">
+                                <label for="temperature">Temperature</label>
+                                <input type="text" id="temperature" placeholder="e.g. 18–27°C">
                             </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="petSafe">Pet Safety</label>
+                            <select id="petSafe">
+                                <option value="">Select pet safety</option>
+                                <option>Pet safe</option>
+                                <option>Not pet safe</option>
+                                <option>Unknown</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="commonProblems">Common Problems</label>
+                            <textarea id="commonProblems"
+                                placeholder="e.g. Yellow leaves from overwatering, root rot, brown tips"></textarea>
                         </div>
 
                         <div class="form-group">
@@ -729,8 +774,14 @@
                                 placeholder="Write a short, simple tip for beginner users."></textarea>
                         </div>
 
+                        <div class="form-group">
+                            <label for="funFact">Fun Fact</label>
+                            <textarea id="funFact"
+                                placeholder="e.g. Snake Plants convert CO₂ to oxygen at night."></textarea>
+                        </div>
+
                         <p class="form-note">
-                            Suggested approach: keep the wording short, practical, and easy for beginners to follow.
+                            Keep the wording short, practical, and easy for beginners to follow.
                         </p>
 
                         <div class="actions-row">
@@ -762,11 +813,17 @@
                                 <div class="preview-meta">
                                     <span><strong>Category:</strong> <span id="previewCategory">—</span></span>
                                     <span><strong>Difficulty:</strong> <span id="previewDifficulty">—</span></span>
+                                    <span><strong>Origin:</strong> <span id="previewOrigin">—</span></span>
                                     <span><strong>Watering:</strong> <span id="previewWatering">—</span></span>
                                     <span><strong>Light:</strong> <span id="previewLight">—</span></span>
+                                    <span><strong>Soil Type:</strong> <span id="previewSoilType">—</span></span>
+                                    <span><strong>Temperature:</strong> <span id="previewTemperature">—</span></span>
                                     <span><strong>Pet Safety:</strong> <span id="previewPetSafe">—</span></span>
+                                    <span><strong>Common Problems:</strong> <span
+                                            id="previewCommonProblems">—</span></span>
                                     <span><strong>Tip:</strong> <span id="previewTip">A short care tip will appear
                                             here.</span></span>
+                                    <span><strong>Fun Fact:</strong> <span id="previewFunFact">—</span></span>
                                 </div>
                             </div>
                         </article>
@@ -790,19 +847,30 @@
         const scientificName = document.getElementById('scientificName');
         const category = document.getElementById('category');
         const difficulty = document.getElementById('difficulty');
+        const origin = document.getElementById('origin');
         const watering = document.getElementById('watering');
         const light = document.getElementById('light');
+        const soilType = document.getElementById('soilType');
+        const temperature = document.getElementById('temperature');
         const petSafe = document.getElementById('petSafe');
         const plantImage = document.getElementById('plantImage');
+        const commonProblems = document.getElementById('commonProblems');
         const careTip = document.getElementById('careTip');
+        const funFact = document.getElementById('funFact');
+
         const previewName = document.getElementById('previewName');
         const previewScientific = document.getElementById('previewScientific');
         const previewCategory = document.getElementById('previewCategory');
         const previewDifficulty = document.getElementById('previewDifficulty');
+        const previewOrigin = document.getElementById('previewOrigin');
         const previewWatering = document.getElementById('previewWatering');
         const previewLight = document.getElementById('previewLight');
+        const previewSoilType = document.getElementById('previewSoilType');
+        const previewTemperature = document.getElementById('previewTemperature');
         const previewPetSafe = document.getElementById('previewPetSafe');
+        const previewCommonProblems = document.getElementById('previewCommonProblems');
         const previewTip = document.getElementById('previewTip');
+        const previewFunFact = document.getElementById('previewFunFact');
         const previewImage = document.getElementById('previewImage');
         const previewPlaceholder = document.getElementById('previewPlaceholder');
 
@@ -814,20 +882,26 @@
         function updatePreview() {
             previewName.textContent = commonName.value.trim() || 'New Plant';
             previewScientific.textContent = scientificName.value.trim() || 'Scientific name';
-            previewCategory.textContent = category.value || '—';
-            previewDifficulty.textContent = difficulty.value || '—';
-            previewWatering.textContent = watering.value.trim() || '—';
-            previewLight.textContent = light.value.trim() || '—';
-            previewPetSafe.textContent = petSafe.value || '—';
-            previewTip.textContent = careTip.value.trim() || 'A short care tip will appear here.';
+            previewCategory.textContent = category.value || '\u2014';
+            previewDifficulty.textContent = difficulty.value || '\u2014';
+            previewOrigin.textContent = origin.value.trim() || '\u2014';
+            previewWatering.textContent = watering.value.trim() || '\u2014';
+            previewLight.textContent = light.value.trim() || '\u2014';
+            previewSoilType.textContent = soilType.value.trim() || '\u2014';
+            previewTemperature.textContent = temperature.value.trim() || '\u2014';
+            previewPetSafe.textContent = petSafe.value || '\u2014';
+            previewCommonProblems.textContent = commonProblems.value.trim() || '\u2014';
+            previewTip.textContent = careTip.value.trim() || '\u2014';
+            previewFunFact.textContent = funFact.value.trim() || '\u2014';
 
             const file = plantImage.files[0];
+
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function (e) {
-                    previewImage.src = e.target.result;
-                    previewImage.style.display = 'block';
-                    previewPlaceholder.style.display = 'none';
+                previewImage.src = e.target.result;
+                previewImage.style.display = 'block';
+                previewPlaceholder.style.display = 'none';
                 };
                 reader.readAsDataURL(file);
             } else {
@@ -837,8 +911,21 @@
             }
         }
 
-        [commonName, scientificName, category, difficulty, watering, light, petSafe, careTip]
-            .forEach(field => field.addEventListener('input', updatePreview));
+        [
+        commonName,
+        scientificName,
+        category,
+        difficulty,
+        origin,
+        watering,
+        light,
+        soilType,
+        temperature,
+        petSafe,
+        commonProblems,
+        careTip,
+        funFact
+        ].forEach(field => field.addEventListener('input', updatePreview));
 
         plantImage.addEventListener('change', updatePreview);
 

@@ -35,7 +35,11 @@
             --radius-lg: 20px;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
         body {
             font-family: 'Source Sans 3', sans-serif;
@@ -44,75 +48,199 @@
             overflow-x: hidden;
         }
 
-        a { text-decoration: none; color: inherit; }
-        button, input, select, textarea { font-family: inherit; }
-        
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        button,
+        input,
+        select,
+        textarea {
+            font-family: inherit;
+        }
+
         /* ── Breadcrumb ── */
         .breadcrumb {
-            display: flex; align-items: center; gap: 0.5rem;
-            font-size: 0.9rem; color: var(--text-secondary); font-weight: 400;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-weight: 400;
         }
-        .breadcrumb a { color: var(--green-deep); font-weight: 500; transition: opacity 0.2s; }
-        .breadcrumb a:hover { opacity: 0.7; }
-        .breadcrumb .sep { color: var(--text-secondary); opacity: 0.5; }
+
+        .breadcrumb a {
+            color: var(--green-deep);
+            font-weight: 500;
+            transition: opacity 0.2s;
+        }
+
+        .breadcrumb a:hover {
+            opacity: 0.7;
+        }
+
+        .breadcrumb .sep {
+            color: var(--text-secondary);
+            opacity: 0.5;
+        }
 
         /* ── Nav ── */
         nav {
-            position: fixed; top: 0; width: 100%; z-index: 100;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
             padding: 1rem 5%;
-            display: flex; justify-content: space-between; align-items: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             background: rgba(250, 250, 245, 0.9);
-            backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
             border-bottom: 1px solid rgba(45, 90, 61, 0.05);
             transition: box-shadow 0.3s ease;
         }
-        nav.scrolled { box-shadow: var(--shadow-sm); }
+
+        nav.scrolled {
+            box-shadow: var(--shadow-sm);
+        }
 
         .nav-logo {
             font-family: 'Playfair Display', serif;
-            font-size: 1.5rem; font-weight: 600; color: var(--green-deep);
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--green-deep);
         }
-        .nav-right { display: flex; align-items: center; gap: 0.55rem; flex-wrap: wrap; }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+            flex-wrap: wrap;
+        }
 
         .nav-link {
-            padding: 0.65rem 1rem; border-radius: 8px;
-            color: var(--text-primary); font-size: 0.95rem; font-weight: 500;
+            padding: 0.65rem 1rem;
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            font-weight: 500;
             transition: 0.25s ease;
         }
-        .nav-link:hover, .nav-link.active { background: var(--green-wash); color: var(--green-deep); }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: var(--green-wash);
+            color: var(--green-deep);
+        }
 
         /* ── Buttons ── */
         .btn {
-            display: inline-flex; align-items: center; justify-content: center;
-            padding: 0.72rem 1.3rem; border-radius: 8px;
-            font-size: 0.95rem; font-weight: 500; border: none; cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.72rem 1.3rem;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
             transition: all 0.25s ease;
         }
-        .btn-primary { background: var(--green-deep); color: var(--text-light); }
-        .btn-primary:hover { background: #1E4A2E; transform: translateY(-1px); box-shadow: var(--shadow-md); }
 
-        .btn-outline { background: transparent; color: var(--green-deep); border: 1.5px solid var(--green-mid); }
-        .btn-outline:hover { background: var(--green-deep); color: var(--text-light); border-color: var(--green-deep); }
+        .btn-primary {
+            background: var(--green-deep);
+            color: var(--text-light);
+        }
 
-        .btn-danger { background: transparent; color: var(--danger); border: 1.5px solid var(--danger); }
-        .btn-danger:hover { background: var(--danger); color: var(--white); }
+        .btn-primary:hover {
+            background: #1E4A2E;
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
 
-        .btn-soft { background: var(--green-wash); color: var(--green-deep); }
-        .btn-soft:hover { background: #e3f0df; }
+        .btn-outline {
+            background: transparent;
+            color: var(--green-deep);
+            border: 1.5px solid var(--green-mid);
+        }
+
+        .btn-outline:hover {
+            background: var(--green-deep);
+            color: var(--text-light);
+            border-color: var(--green-deep);
+        }
+
+        .btn-danger {
+            background: transparent;
+            color: var(--danger);
+            border: 1.5px solid var(--danger);
+        }
+
+        .btn-danger:hover {
+            background: var(--danger);
+            color: var(--white);
+        }
+
+        .btn-soft {
+            background: var(--green-wash);
+            color: var(--green-deep);
+        }
+
+        .btn-soft:hover {
+            background: #e3f0df;
+        }
 
         /* ── Page ── */
-        .page { padding: 7.4rem 5% 3rem; position: relative; min-height: 100vh; }
-
-        .bg-shape-1, .bg-shape-2 {
-            position: absolute; border-radius: 50%; filter: blur(80px);
-            z-index: 0; pointer-events: none;
+        .page {
+            padding: 7.4rem 5% 3rem;
+            position: relative;
+            min-height: 100vh;
         }
-        .bg-shape-1 { top: 40px; left: -120px; width: 360px; height: 360px; background: var(--green-pale); opacity: 0.24; }
-        .bg-shape-2 { bottom: -80px; right: -120px; width: 420px; height: 420px; background: #DCECD8; opacity: 0.34; }
 
-        .layout { position: relative; z-index: 1; max-width: 1220px; margin: 0 auto; display: grid; gap: 1.2rem; }
+        .bg-shape-1,
+        .bg-shape-2 {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: 0;
+            pointer-events: none;
+        }
 
-        .content-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 1.2rem; align-items: start; }
+        .bg-shape-1 {
+            top: 40px;
+            left: -120px;
+            width: 360px;
+            height: 360px;
+            background: var(--green-pale);
+            opacity: 0.24;
+        }
+
+        .bg-shape-2 {
+            bottom: -80px;
+            right: -120px;
+            width: 420px;
+            height: 420px;
+            background: #DCECD8;
+            opacity: 0.34;
+        }
+
+        .layout {
+            position: relative;
+            z-index: 1;
+            max-width: 1220px;
+            margin: 0 auto;
+            display: grid;
+            gap: 1.2rem;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 1.2rem;
+            align-items: start;
+        }
 
         /* ── Cards ── */
         .section-card {
@@ -123,49 +251,113 @@
             box-shadow: var(--shadow-lg);
             padding: 1.4rem;
         }
-        .section-head { margin-bottom: 1.2rem; }
+
+        .section-head {
+            margin-bottom: 1.2rem;
+        }
+
         .section-title {
             font-family: 'Playfair Display', serif;
-            font-size: 1.65rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.3rem;
+            font-size: 1.65rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.3rem;
         }
-        .section-desc { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; font-weight: 300; }
+
+        .section-desc {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            font-weight: 300;
+        }
 
         h1 {
             font-family: 'Playfair Display', serif;
-            font-size: 2.4rem; line-height: 1.1; font-weight: 700; margin-bottom: 0.7rem;
+            font-size: 2.4rem;
+            line-height: 1.1;
+            font-weight: 700;
+            margin-bottom: 0.7rem;
         }
 
         /* ── Messages ── */
         .message {
-            display: none; border-radius: 14px; padding: 0.95rem 1rem;
-            margin-bottom: 1rem; font-size: 0.93rem; line-height: 1.55;
+            display: none;
+            border-radius: 14px;
+            padding: 0.95rem 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.93rem;
+            line-height: 1.55;
         }
-        .message.error { background: var(--danger-bg); color: var(--danger); border: 1px solid #F3C8C8; }
+
+        .message.error {
+            background: var(--danger-bg);
+            color: var(--danger);
+            border: 1px solid #F3C8C8;
+        }
 
         /* ── Form ── */
-        form { display: grid; gap: 1rem; }
-        .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
-        .form-group { display: grid; gap: 0.42rem; }
+        form {
+            display: grid;
+            gap: 1rem;
+        }
 
-        label { font-size: 0.92rem; font-weight: 600; color: var(--text-primary); }
+        .field-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.9rem;
+        }
 
-        input, select, textarea {
-            width: 100%; padding: 0.95rem 1rem; border-radius: 10px;
+        .form-group {
+            display: grid;
+            gap: 0.42rem;
+        }
+
+        label {
+            font-size: 0.92rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 0.95rem 1rem;
+            border-radius: 10px;
             border: 1px solid rgba(45, 90, 61, 0.15);
             background: rgba(255, 255, 255, 0.92);
-            font-size: 0.96rem; color: var(--text-primary);
-            outline: none; transition: all 0.25s ease;
+            font-size: 0.96rem;
+            color: var(--text-primary);
+            outline: none;
+            transition: all 0.25s ease;
         }
-        textarea { min-height: 115px; resize: vertical; }
-        input:focus, select:focus, textarea:focus {
+
+        textarea {
+            min-height: 115px;
+            resize: vertical;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
             border-color: var(--green-mid);
             box-shadow: 0 0 0 4px rgba(74, 124, 92, 0.12);
             background: var(--white);
         }
 
-        .form-note { margin-top: -0.2rem; font-size: 0.84rem; color: var(--text-secondary); font-weight: 300; }
+        .form-note {
+            margin-top: -0.2rem;
+            font-size: 0.84rem;
+            color: var(--text-secondary);
+            font-weight: 300;
+        }
 
-        .actions-row { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 0.2rem; }
+        .actions-row {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            margin-top: 0.2rem;
+        }
 
         /* ── Plant Selector ── */
         .selector-card {
@@ -177,130 +369,363 @@
             padding: 1.4rem;
         }
 
-        .plant-selector-wrap { display: flex; gap: 0.9rem; align-items: end; flex-wrap: wrap; }
-        .plant-selector-wrap .form-group { flex: 1; min-width: 220px; }
-        .plant-selector-wrap .btn { margin-bottom: 1px; }
+        .plant-selector-wrap {
+            display: flex;
+            gap: 0.9rem;
+            align-items: end;
+            flex-wrap: wrap;
+        }
+
+        .plant-selector-wrap .form-group {
+            flex: 1;
+            min-width: 220px;
+        }
+
+        .plant-selector-wrap .btn {
+            margin-bottom: 1px;
+        }
 
         /* ── Edit Form Area (hidden until plant selected) ── */
-        .edit-area { display: none; }
-        .edit-area.visible { display: grid; gap: 1.2rem; }
+        .edit-area {
+            display: none;
+        }
+
+        .edit-area.visible {
+            display: grid;
+            gap: 1.2rem;
+        }
 
         /* ── Empty State ── */
         .empty-state {
-            text-align: center; padding: 3rem 1.5rem;
+            text-align: center;
+            padding: 3rem 1.5rem;
             color: var(--text-secondary);
         }
+
         .empty-state-icon {
-            width: 72px; height: 72px; margin: 0 auto 1rem;
-            border-radius: 50%; background: var(--green-wash);
-            display: flex; align-items: center; justify-content: center;
+            width: 72px;
+            height: 72px;
+            margin: 0 auto 1rem;
+            border-radius: 50%;
+            background: var(--green-wash);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        .empty-state-icon svg { width: 32px; height: 32px; stroke: var(--green-mid); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+        .empty-state-icon svg {
+            width: 32px;
+            height: 32px;
+            stroke: var(--green-mid);
+            fill: none;
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
         .empty-state h3 {
             font-family: 'Playfair Display', serif;
-            font-size: 1.25rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.35rem;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.35rem;
         }
-        .empty-state p { font-size: 0.93rem; font-weight: 300; line-height: 1.6; }
+
+        .empty-state p {
+            font-size: 0.93rem;
+            font-weight: 300;
+            line-height: 1.6;
+        }
 
         /* ── Preview ── */
-        .preview-card { display: grid; gap: 1rem; }
+        .preview-card {
+            display: grid;
+            gap: 1rem;
+        }
 
         .preview-plant {
-            border-radius: 20px; overflow: hidden; background: var(--white);
-            border: 1px solid rgba(45, 90, 61, 0.08); box-shadow: var(--shadow-sm);
+            border-radius: 20px;
+            overflow: hidden;
+            background: var(--white);
+            border: 1px solid rgba(45, 90, 61, 0.08);
+            box-shadow: var(--shadow-sm);
         }
-        .preview-image-wrap {
-            height: 210px; background: linear-gradient(180deg, #edf4ea, #f8fbf7);
-            display: flex; align-items: center; justify-content: center; overflow: hidden;
-        }
-        .preview-image-wrap img { width: 100%; height: 100%; object-fit: cover; display: none; }
-        .preview-placeholder { color: var(--text-secondary); font-size: 0.95rem; font-weight: 300; }
 
-        .preview-body { padding: 1rem; }
+        .preview-image-wrap {
+            height: 210px;
+            background: linear-gradient(180deg, #edf4ea, #f8fbf7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .preview-image-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+
+        .preview-placeholder {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            font-weight: 300;
+        }
+
+        .preview-body {
+            padding: 1rem;
+        }
+
         .preview-name {
             font-family: 'Playfair Display', serif;
-            font-size: 1.35rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.15rem;
+            font-size: 1.35rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.15rem;
         }
-        .preview-scientific { font-size: 0.92rem; color: var(--text-secondary); font-style: italic; font-weight: 300; margin-bottom: 0.8rem; }
-        .preview-meta { display: grid; gap: 0.45rem; font-size: 0.94rem; color: var(--text-secondary); line-height: 1.55; font-weight: 300; }
-        .preview-meta strong { color: var(--green-deep); font-weight: 600; }
+
+        .preview-scientific {
+            font-size: 0.92rem;
+            color: var(--text-secondary);
+            font-style: italic;
+            font-weight: 300;
+            margin-bottom: 0.8rem;
+        }
+
+        .preview-meta {
+            display: grid;
+            gap: 0.45rem;
+            font-size: 0.94rem;
+            color: var(--text-secondary);
+            line-height: 1.55;
+            font-weight: 300;
+        }
+
+        .preview-meta strong {
+            color: var(--green-deep);
+            font-weight: 600;
+        }
 
         /* ── Change Indicator Badge ── */
         .change-badge {
-            display: inline-flex; align-items: center; gap: 0.35rem;
-            padding: 0.3rem 0.75rem; border-radius: 20px;
-            background: #FFF8E6; border: 1px solid #F0DFA0;
-            font-size: 0.8rem; font-weight: 500; color: #8B7020;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.3rem 0.75rem;
+            border-radius: 20px;
+            background: #FFF8E6;
+            border: 1px solid #F0DFA0;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #8B7020;
             margin-bottom: 0.8rem;
         }
-        .change-badge svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+        .change-badge svg {
+            width: 14px;
+            height: 14px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
 
         /* ── Popup Modals ── */
         .modal-overlay {
-            display: none; position: fixed; inset: 0; z-index: 999;
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 999;
             background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
-            align-items: center; justify-content: center;
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            align-items: center;
+            justify-content: center;
             animation: overlayIn 0.3s ease;
         }
-        .modal-overlay.visible { display: flex; }
+
+        .modal-overlay.visible {
+            display: flex;
+        }
 
         .modal-box {
-            background: var(--white); border-radius: 24px;
+            background: var(--white);
+            border-radius: 24px;
             padding: 2.4rem 2.2rem 2rem;
-            max-width: 420px; width: 90%; text-align: center;
+            max-width: 420px;
+            width: 90%;
+            text-align: center;
             box-shadow: 0 20px 60px rgba(45, 90, 61, 0.22);
             animation: modalIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
+
         .modal-icon {
-            width: 72px; height: 72px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             margin: 0 auto 1.2rem;
         }
-        .modal-icon.success-icon { background: var(--success-bg); }
-        .modal-icon.danger-icon { background: var(--danger-bg); }
 
-        .modal-icon svg { width: 36px; height: 36px; stroke-width: 2.5; fill: none; stroke-linecap: round; stroke-linejoin: round; }
-        .modal-icon.success-icon svg { stroke: var(--success); }
-        .modal-icon.danger-icon svg { stroke: var(--danger); }
-        .modal-icon svg .check-path { stroke-dasharray: 40; stroke-dashoffset: 40; animation: drawCheck 0.5s ease 0.3s forwards; }
+        .modal-icon.success-icon {
+            background: var(--success-bg);
+        }
+
+        .modal-icon.danger-icon {
+            background: var(--danger-bg);
+        }
+
+        .modal-icon svg {
+            width: 36px;
+            height: 36px;
+            stroke-width: 2.5;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .modal-icon.success-icon svg {
+            stroke: var(--success);
+        }
+
+        .modal-icon.danger-icon svg {
+            stroke: var(--danger);
+        }
+
+        .modal-icon svg .check-path {
+            stroke-dasharray: 40;
+            stroke-dashoffset: 40;
+            animation: drawCheck 0.5s ease 0.3s forwards;
+        }
 
         .modal-title {
             font-family: 'Playfair Display', serif;
-            font-size: 1.5rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
         }
-        .modal-desc { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; font-weight: 300; margin-bottom: 1.5rem; }
-        .modal-desc strong { color: var(--green-deep); font-weight: 600; }
 
-        .modal-redirect { font-size: 0.84rem; color: var(--text-secondary); font-weight: 300; }
-        .modal-redirect span { font-weight: 600; color: var(--green-deep); }
+        .modal-desc {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            font-weight: 300;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-desc strong {
+            color: var(--green-deep);
+            font-weight: 600;
+        }
+
+        .modal-redirect {
+            font-size: 0.84rem;
+            color: var(--text-secondary);
+            font-weight: 300;
+        }
+
+        .modal-redirect span {
+            font-weight: 600;
+            color: var(--green-deep);
+        }
 
         .modal-btn {
-            display: inline-flex; align-items: center; justify-content: center;
-            padding: 0.8rem 2rem; border-radius: 10px;
-            font-size: 0.95rem; font-weight: 600; border: none; cursor: pointer;
-            transition: all 0.25s ease; margin-bottom: 1rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.8rem 2rem;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            margin-bottom: 1rem;
         }
-        .modal-btn.primary { background: var(--green-deep); color: var(--text-light); }
-        .modal-btn.primary:hover { background: #1E4A2E; transform: translateY(-1px); box-shadow: var(--shadow-md); }
-        .modal-btn.danger { background: var(--danger); color: var(--white); }
-        .modal-btn.danger:hover { background: #993D3D; transform: translateY(-1px); }
-        .modal-btn.ghost { background: transparent; color: var(--text-secondary); }
-        .modal-btn.ghost:hover { background: var(--green-wash); color: var(--green-deep); }
 
-        .modal-actions { display: flex; gap: 0.6rem; justify-content: center; flex-wrap: wrap; margin-bottom: 0.5rem; }
+        .modal-btn.primary {
+            background: var(--green-deep);
+            color: var(--text-light);
+        }
+
+        .modal-btn.primary:hover {
+            background: #1E4A2E;
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .modal-btn.danger {
+            background: var(--danger);
+            color: var(--white);
+        }
+
+        .modal-btn.danger:hover {
+            background: #993D3D;
+            transform: translateY(-1px);
+        }
+
+        .modal-btn.ghost {
+            background: transparent;
+            color: var(--text-secondary);
+        }
+
+        .modal-btn.ghost:hover {
+            background: var(--green-wash);
+            color: var(--green-deep);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 0.6rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 0.5rem;
+        }
 
         /* ── Footer ── */
         .page-footer {
-            max-width: 1220px; margin: 1.3rem auto 0; text-align: center;
-            color: var(--text-secondary); font-size: 0.82rem; font-weight: 300;
-            position: relative; z-index: 1;
+            max-width: 1220px;
+            margin: 1.3rem auto 0;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.82rem;
+            font-weight: 300;
+            position: relative;
+            z-index: 1;
         }
 
-        @keyframes overlayIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes modalIn { from { opacity: 0; transform: scale(0.9) translateY(20px); } to { opacity: 1; transform: scale(1) translateY(0); } }
-        @keyframes drawCheck { to { stroke-dashoffset: 0; } }
+        @keyframes overlayIn {
+            from {
+                opacity: 0;
+            }
 
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9) translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        @keyframes drawCheck {
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
     </style>
 </head>
 
@@ -329,45 +754,6 @@
             </p>
             <button class="modal-btn primary" id="modalGoBtn">Go to Admin Dashboard</button>
             <p class="modal-redirect">Redirecting automatically in <span id="countdown">5</span>s</p>
-        </div>
-    </div>
-
-    <!-- Delete Confirmation Modal -->
-    <div class="modal-overlay" id="deleteModal">
-        <div class="modal-box">
-            <div class="modal-icon danger-icon">
-                <svg viewBox="0 0 24 24">
-                    <circle cx="12" cy="12" r="10" stroke-opacity="0.3" />
-                    <line x1="15" y1="9" x2="9" y2="15" />
-                    <line x1="9" y1="9" x2="15" y2="15" />
-                </svg>
-            </div>
-            <h2 class="modal-title">Delete Plant?</h2>
-            <p class="modal-desc">
-                Are you sure you want to remove <strong id="deletePlantName">this plant</strong> from the catalog? This action cannot be undone.
-            </p>
-            <div class="modal-actions">
-                <button class="modal-btn danger" id="confirmDeleteBtn">Yes, Delete</button>
-                <button class="modal-btn ghost" id="cancelDeleteBtn">Cancel</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Delete Success Modal -->
-    <div class="modal-overlay" id="deleteSuccessModal">
-        <div class="modal-box">
-            <div class="modal-icon success-icon">
-                <svg viewBox="0 0 24 24">
-                    <circle cx="12" cy="12" r="10" stroke-opacity="0.3" />
-                    <polyline points="7 13 10 16 17 9" class="check-path" />
-                </svg>
-            </div>
-            <h2 class="modal-title">Plant Deleted</h2>
-            <p class="modal-desc">
-                The plant has been removed from the catalog.
-            </p>
-            <button class="modal-btn primary" id="deleteSuccessGoBtn">Go to Admin Dashboard</button>
-            <p class="modal-redirect">Redirecting automatically in <span id="deleteCountdown">5</span>s</p>
         </div>
     </div>
 
@@ -404,7 +790,8 @@
             <div class="empty-state" id="emptyState">
                 <div class="empty-state-icon">
                     <svg viewBox="0 0 24 24">
-                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" stroke-opacity="0.3" />
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"
+                            stroke-opacity="0.3" />
                         <path d="M12 8c-2.2 0-4 1.8-4 4m4-4c2.2 0 4 1.8 4 4m-4-4v0m-4 4h8" />
                         <path d="M9 16c.8.8 1.8 1.2 3 1.2s2.2-.4 3-1.2" />
                     </svg>
@@ -425,7 +812,11 @@
                         </div>
 
                         <div id="changeBadge" class="change-badge" style="display:none;">
-                            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                            <svg viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="10" />
+                                <line x1="12" y1="8" x2="12" y2="12" />
+                                <line x1="12" y1="16" x2="12.01" y2="16" />
+                            </svg>
                             <span>You have unsaved changes</span>
                         </div>
 
@@ -434,20 +825,20 @@
                         <form id="editPlantForm" novalidate>
                             <div class="field-row">
                                 <div class="form-group">
-                                    <label for="commonName">Common Name</label>
-                                    <input type="text" id="commonName" placeholder="e.g. Snake Plant">
+                                    <label for="editCommonName">Common Name</label>
+                                    <input type="text" id="editCommonName" value="Snake Plant">
                                 </div>
+
                                 <div class="form-group">
-                                    <label for="scientificName">Scientific Name</label>
-                                    <input type="text" id="scientificName" placeholder="e.g. Dracaena trifasciata">
+                                    <label for="editScientificName">Scientific Name</label>
+                                    <input type="text" id="editScientificName" value="Dracaena trifasciata">
                                 </div>
                             </div>
 
                             <div class="field-row">
                                 <div class="form-group">
-                                    <label for="category">Category</label>
-                                    <select id="category">
-                                        <option value="">Select a category</option>
+                                    <label for="editCategory">Category</label>
+                                    <select id="editCategory">
                                         <option>Indoor plant</option>
                                         <option>Tropical plant</option>
                                         <option>Trailing plant</option>
@@ -455,10 +846,10 @@
                                         <option>Low-maintenance plant</option>
                                     </select>
                                 </div>
+
                                 <div class="form-group">
-                                    <label for="difficulty">Difficulty Level</label>
-                                    <select id="difficulty">
-                                        <option value="">Select difficulty</option>
+                                    <label for="editDifficulty">Difficulty Level</label>
+                                    <select id="editDifficulty">
                                         <option>Beginner-friendly</option>
                                         <option>Intermediate</option>
                                         <option>Advanced</option>
@@ -468,44 +859,68 @@
 
                             <div class="field-row">
                                 <div class="form-group">
-                                    <label for="watering">Watering Frequency</label>
-                                    <input type="text" id="watering" placeholder="e.g. Every 7–10 days">
+                                    <label for="editOrigin">Origin</label>
+                                    <input type="text" id="editOrigin" value="West Africa">
                                 </div>
+
                                 <div class="form-group">
-                                    <label for="light">Light Requirements</label>
-                                    <input type="text" id="light" placeholder="e.g. Bright indirect light">
+                                    <label for="editPlantImage">Replace Plant Image</label>
+                                    <input type="file" id="editPlantImage" accept="image/*">
                                 </div>
                             </div>
 
                             <div class="field-row">
                                 <div class="form-group">
-                                    <label for="petSafe">Pet Safety</label>
-                                    <select id="petSafe">
-                                        <option value="">Select pet safety</option>
-                                        <option>Pet safe</option>
-                                        <option>Not pet safe</option>
-                                        <option>Unknown</option>
-                                    </select>
+                                    <label for="editWatering">Watering Frequency</label>
+                                    <input type="text" id="editWatering" value="Every 14–21 days">
                                 </div>
+
                                 <div class="form-group">
-                                    <label for="plantImage">Replace Image</label>
-                                    <input type="file" id="plantImage" accept="image/*">
+                                    <label for="editLight">Light Requirements</label>
+                                    <input type="text" id="editLight" value="Bright indirect to low light">
+                                </div>
+                            </div>
+
+                            <div class="field-row">
+                                <div class="form-group">
+                                    <label for="editSoilType">Soil Type</label>
+                                    <input type="text" id="editSoilType" value="Well-draining potting mix">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="editTemperature">Temperature</label>
+                                    <input type="text" id="editTemperature" value="18–27°C">
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <label for="careTip">Short Care Tip</label>
-                                <textarea id="careTip" placeholder="Write a short, simple tip for beginner users."></textarea>
+                                <label for="editPetSafe">Pet Safety</label>
+                                <select id="editPetSafe">
+                                    <option value="Not pet safe">Not pet safe</option>
+                                    <option value="Pet safe">Pet safe</option>
+                                    <option value="Unknown">Unknown</option>
+                                </select>
                             </div>
 
-                            <p class="form-note">
-                                Only update what needs changing — all other fields will remain as they were.
-                            </p>
+                            <div class="form-group">
+                                <label for="editCommonProblems">Common Problems</label>
+                                <textarea
+                                    id="editCommonProblems">Yellow leaves from overwatering, root rot, brown tips</textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="editCareTip">Short Care Tip</label>
+                                <textarea id="editCareTip">Let the soil dry well before watering again.</textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="editFunFact">Fun Fact</label>
+                                <textarea id="editFunFact"></textarea>
+                            </div>
 
                             <div class="actions-row">
                                 <button type="submit" class="btn btn-primary">Save Changes</button>
-                                <button type="button" class="btn btn-danger" id="deletePlantBtn">Delete Plant</button>
-                                <a href="admin-dashboard.html" class="btn btn-outline">Back to Admin Panel</a>
+                                <a href="admin-dashboard.html" class="btn btn-outline">Back to Admin Dashboard</a>
                             </div>
                         </form>
                     </section>
@@ -530,10 +945,17 @@
                                     <div class="preview-meta">
                                         <span><strong>Category:</strong> <span id="previewCategory">—</span></span>
                                         <span><strong>Difficulty:</strong> <span id="previewDifficulty">—</span></span>
+                                        <span><strong>Origin:</strong> <span id="previewOrigin">—</span></span>
                                         <span><strong>Watering:</strong> <span id="previewWatering">—</span></span>
                                         <span><strong>Light:</strong> <span id="previewLight">—</span></span>
+                                        <span><strong>Soil Type:</strong> <span id="previewSoilType">—</span></span>
+                                        <span><strong>Temperature:</strong> <span
+                                                id="previewTemperature">—</span></span>
                                         <span><strong>Pet Safety:</strong> <span id="previewPetSafe">—</span></span>
+                                        <span><strong>Common Problems:</strong> <span
+                                                id="previewCommonProblems">—</span></span>
                                         <span><strong>Tip:</strong> <span id="previewTip">—</span></span>
+                                        <span><strong>Fun Fact:</strong> <span id="previewFunFact">—</span></span>
                                     </div>
                                 </div>
                             </article>
@@ -560,11 +982,23 @@
                 scientificName: "Dracaena trifasciata",
                 category: "Indoor plant",
                 difficulty: "Beginner-friendly",
-                watering: "Every 14–21 days",
+                watering: "Every 14\u201321 days",
                 light: "Low to bright indirect light",
-                petSafe: "Not pet safe",
-                careTip: "Let the soil dry out completely between waterings. Overwatering is the most common mistake.",
-                image: ""
+                petSafe: false,
+                soil: "Well-draining cactus or succulent mix",
+                temperature: "15\u201327 \u00B0C (60\u201380 \u00B0F)",
+                humidity: "Low \u2014 tolerates dry air well",
+                size: "Up to 90 cm (3 ft) tall indoors",
+                origin: "West Africa (Nigeria, Congo)",
+                about: "One of the hardiest houseplants available, the Snake Plant is famous for its upright, sword-shaped leaves with striking green and yellow patterns. It purifies indoor air and thrives on neglect, making it a perfect first plant.",
+                tip: "Let the soil dry out completely between waterings. Overwatering is the most common mistake \u2014 when in doubt, wait a few more days.",
+                funFact: "Snake Plants are one of the few plants that convert CO\u2082 to oxygen at night, making them an excellent choice for bedrooms.",
+                problems: [
+                    { name: "Root rot", desc: "Caused by overwatering or poor drainage. Let soil dry fully and ensure the pot has drainage holes." },
+                    { name: "Yellowing leaves", desc: "Usually a sign of too much water. Reduce watering frequency and check for soggy soil." },
+                    { name: "Soft, mushy base", desc: "Advanced overwatering damage. Remove affected leaves and repot in dry soil." }
+                ],
+                image: "images/snake-plant.png"
             },
             {
                 id: 2,
@@ -572,11 +1006,23 @@
                 scientificName: "Epipremnum aureum",
                 category: "Trailing plant",
                 difficulty: "Beginner-friendly",
-                watering: "Every 7–10 days",
+                watering: "Every 7\u201310 days",
                 light: "Low to bright indirect light",
-                petSafe: "Not pet safe",
-                careTip: "Trim leggy vines to encourage fuller growth. Thrives in almost any indoor condition.",
-                image: ""
+                petSafe: false,
+                soil: "Standard well-draining potting mix",
+                temperature: "18\u201330 \u00B0C (65\u201385 \u00B0F)",
+                humidity: "Moderate \u2014 adapts to most indoor levels",
+                size: "Vines can trail up to 3 m (10 ft) indoors",
+                origin: "Southeast Asia (French Polynesia)",
+                about: "Pothos is one of the most popular and forgiving houseplants. Its heart-shaped leaves cascade beautifully from shelves and hanging baskets, and it adapts to almost any indoor condition with minimal care.",
+                tip: "Trim leggy vines to encourage fuller growth. You can propagate the cuttings in water to grow new plants for free.",
+                funFact: "Pothos earned the nickname \u2018Devil\u2019s Ivy\u2019 because it stays green even in complete darkness and is nearly impossible to kill.",
+                problems: [
+                    { name: "Brown leaf tips", desc: "Often caused by underwatering or very dry air. Water when the top inch of soil feels dry." },
+                    { name: "Yellowing leaves", desc: "Can indicate overwatering. Allow soil to dry between waterings and check drainage." },
+                    { name: "Leggy, sparse vines", desc: "Caused by insufficient light. Move to a brighter spot or trim to encourage bushier growth." }
+                ],
+                image: "images/pothos.png"
             },
             {
                 id: 3,
@@ -584,11 +1030,23 @@
                 scientificName: "Monstera deliciosa",
                 category: "Tropical plant",
                 difficulty: "Intermediate",
-                watering: "Every 7–10 days",
+                watering: "Every 7\u201310 days",
                 light: "Bright indirect light",
-                petSafe: "Not pet safe",
-                careTip: "Wipe leaves regularly to keep them dust-free. Provide a moss pole for climbing support.",
-                image: ""
+                petSafe: false,
+                soil: "Rich, well-draining peat-based mix",
+                temperature: "18\u201327 \u00B0C (65\u201380 \u00B0F)",
+                humidity: "High \u2014 60%+ preferred, mist regularly",
+                size: "Up to 2.5 m (8 ft) tall indoors with support",
+                origin: "Central America (Southern Mexico, Panama)",
+                about: "Known for its dramatic split leaves, the Monstera is a statement plant that brings a tropical feel to any room. As it matures, the iconic leaf fenestrations (holes) become more pronounced, and it can grow impressively large with the right care.",
+                tip: "Wipe leaves regularly to keep them dust-free and give it a moss pole or trellis for climbing support as it grows.",
+                funFact: "The name \u2018deliciosa\u2019 comes from its edible fruit, which tastes like a mix of pineapple and banana \u2014 though it takes over a year to ripen and is toxic when unripe.",
+                problems: [
+                    { name: "No leaf splits", desc: "Young plants or those in low light may not develop fenestrations. Increase light exposure as the plant matures." },
+                    { name: "Brown leaf edges", desc: "Usually caused by low humidity or inconsistent watering. Mist regularly or use a humidifier." },
+                    { name: "Drooping leaves", desc: "Can mean underwatering or root-bound stress. Check soil moisture and consider repotting." }
+                ],
+                image: "images/Monstera.png"
             },
             {
                 id: 4,
@@ -596,11 +1054,23 @@
                 scientificName: "Aloe barbadensis miller",
                 category: "Succulent",
                 difficulty: "Beginner-friendly",
-                watering: "Every 14–21 days",
+                watering: "Every 14\u201321 days",
                 light: "Bright direct or indirect light",
-                petSafe: "Not pet safe",
-                careTip: "Use well-draining soil and avoid letting water sit in the rosette.",
-                image: ""
+                petSafe: false,
+                soil: "Sandy, well-draining cactus mix",
+                temperature: "13\u201327 \u00B0C (55\u201380 \u00B0F)",
+                humidity: "Low \u2014 prefers dry conditions",
+                size: "30\u201360 cm (1\u20132 ft) tall",
+                origin: "Arabian Peninsula",
+                about: "Aloe Vera is both a decorative succulent and a practical household plant. Its thick, gel-filled leaves have been used for centuries to soothe burns and skin irritations. It\u2019s extremely low-maintenance and thrives in bright, sunny spots.",
+                tip: "Use well-draining soil and avoid letting water sit in the rosette. Water deeply but infrequently \u2014 the soil should be completely dry before the next watering.",
+                funFact: "Aloe Vera gel has been used for over 6,000 years \u2014 ancient Egyptians called it the \u2018plant of immortality\u2019 and often included it in burial offerings.",
+                problems: [
+                    { name: "Soft, mushy leaves", desc: "A sign of overwatering. Let the soil dry completely and reduce watering frequency." },
+                    { name: "Brown, crispy tips", desc: "Too much direct sun or underwatering. Move to bright indirect light if scorched." },
+                    { name: "Flat, thin leaves", desc: "The plant may be underwatered or lacking light. Increase watering slightly and give more sun." }
+                ],
+                image: "images/aloe-vera.jpg"
             },
             {
                 id: 5,
@@ -608,11 +1078,23 @@
                 scientificName: "Nephrolepis exaltata",
                 category: "Indoor plant",
                 difficulty: "Intermediate",
-                watering: "Every 3–5 days",
+                watering: "Every 3\u20135 days",
                 light: "Bright indirect light, no direct sun",
-                petSafe: "Pet safe",
-                careTip: "Mist the fronds regularly to keep humidity high, especially in dry rooms.",
-                image: ""
+                petSafe: true,
+                soil: "Rich, peat-based potting mix that retains moisture",
+                temperature: "16\u201324 \u00B0C (60\u201375 \u00B0F)",
+                humidity: "High \u2014 80%+ ideal, mist daily",
+                size: "Up to 90 cm (3 ft) wide with arching fronds",
+                origin: "Tropical regions worldwide (Americas, Africa)",
+                about: "The Boston Fern is a lush, graceful plant with arching fronds that look stunning in hanging baskets. It loves humidity and consistent moisture, making it a great choice for bathrooms or kitchens. It\u2019s also one of the best pet-safe indoor plants.",
+                tip: "Mist the fronds regularly to keep humidity high, especially in dry rooms or during winter when indoor heating dries the air.",
+                funFact: "Boston Ferns are champions at purifying air \u2014 NASA studies ranked them among the top plants for removing formaldehyde from indoor environments.",
+                problems: [
+                    { name: "Dropping leaves (shedding)", desc: "Often caused by dry air or inconsistent watering. Increase humidity and keep soil evenly moist." },
+                    { name: "Yellowing fronds", desc: "Can indicate overwatering or too much direct sun. Move to bright indirect light." },
+                    { name: "Brown leaf tips", desc: "Low humidity is the most common cause. Mist daily or place on a pebble tray with water." }
+                ],
+                image: "images/boston-fern.jpg"
             },
             {
                 id: 6,
@@ -620,11 +1102,23 @@
                 scientificName: "Chlorophytum comosum",
                 category: "Low-maintenance plant",
                 difficulty: "Beginner-friendly",
-                watering: "Every 7–10 days",
+                watering: "Every 7\u201310 days",
                 light: "Bright indirect light",
-                petSafe: "Pet safe",
-                careTip: "Hang it in a basket and let the baby spiderettes trail down for a beautiful display.",
-                image: ""
+                petSafe: true,
+                soil: "Standard well-draining potting mix",
+                temperature: "13\u201327 \u00B0C (55\u201380 \u00B0F)",
+                humidity: "Moderate \u2014 tolerates a range",
+                size: "30\u201345 cm (12\u201318 in) with trailing spiderettes",
+                origin: "Southern and Tropical Africa",
+                about: "The Spider Plant is a classic, easy-going houseplant loved for its arching green-and-white striped leaves and the baby \u2018spiderettes\u2019 it produces on long runners. It\u2019s extremely resilient, pet-safe, and perfect for beginners or anyone who wants a cheerful, low-effort plant.",
+                tip: "Hang it in a basket and let the baby spiderettes trail down for a beautiful cascading display. You can snip them off and root them in water to grow new plants.",
+                funFact: "Spider Plants were one of the first houseplants tested by NASA for air-purifying abilities \u2014 they can remove up to 95% of formaldehyde from a sealed chamber in 24 hours.",
+                problems: [
+                    { name: "Brown leaf tips", desc: "Often caused by fluoride in tap water or dry air. Try using filtered water and misting occasionally." },
+                    { name: "Pale, faded leaves", desc: "Too much direct sunlight can bleach the leaves. Move to bright but indirect light." },
+                    { name: "No spiderettes", desc: "The plant may be too young or getting too much nitrogen fertilizer. Slightly root-bound plants tend to produce more babies." }
+                ],
+                image: "images/spider-plant.jpg"
             }
         ];
 
@@ -633,7 +1127,7 @@
         plantData.forEach(plant => {
             const opt = document.createElement('option');
             opt.value = plant.id;
-            opt.textContent = `${plant.commonName} — ${plant.scientificName}`;
+            opt.textContent = `${plant.commonName} \u2014 ${plant.scientificName}`;
             plantSelect.appendChild(opt);
         });
 
@@ -645,15 +1139,20 @@
         const errorMessage = document.getElementById('errorMessage');
         const changeBadge = document.getElementById('changeBadge');
 
-        const commonName = document.getElementById('commonName');
-        const scientificName = document.getElementById('scientificName');
-        const category = document.getElementById('category');
-        const difficulty = document.getElementById('difficulty');
-        const watering = document.getElementById('watering');
-        const light = document.getElementById('light');
-        const petSafe = document.getElementById('petSafe');
-        const plantImage = document.getElementById('plantImage');
-        const careTip = document.getElementById('careTip');
+        const commonName = document.getElementById('editCommonName');
+        const scientificName = document.getElementById('editScientificName');
+        const category = document.getElementById('editCategory');
+        const difficulty = document.getElementById('editDifficulty');
+        const origin = document.getElementById('editOrigin');
+        const watering = document.getElementById('editWatering');
+        const light = document.getElementById('editLight');
+        const soilType = document.getElementById('editSoilType');
+        const temperature = document.getElementById('editTemperature');
+        const petSafe = document.getElementById('editPetSafe');
+        const commonProblems = document.getElementById('editCommonProblems');
+        const plantImage = document.getElementById('editPlantImage');
+        const careTip = document.getElementById('editCareTip');
+        const funFact = document.getElementById('editFunFact');
 
         const previewName = document.getElementById('previewName');
         const previewScientific = document.getElementById('previewScientific');
@@ -665,40 +1164,86 @@
         const previewTip = document.getElementById('previewTip');
         const previewImage = document.getElementById('previewImage');
         const previewPlaceholder = document.getElementById('previewPlaceholder');
+        const previewOrigin = document.getElementById('previewOrigin');
+        const previewSoilType = document.getElementById('previewSoilType');
+        const previewTemperature = document.getElementById('previewTemperature');
+        const previewCommonProblems = document.getElementById('previewCommonProblems');
+        const previewFunFact = document.getElementById('previewFunFact');
+        const breadcrumbName = document.getElementById('breadcrumbName');
 
         let currentPlant = null;
         let originalValues = {};
+        let currentImageSrc = null; // track the plant's existing image
 
         /* ── Load plant into form ── */
         function loadPlant(plant) {
             currentPlant = plant;
 
-            commonName.value = plant.commonName;
-            scientificName.value = plant.scientificName;
-            category.value = plant.category;
-            difficulty.value = plant.difficulty;
-            watering.value = plant.watering;
-            light.value = plant.light;
-            petSafe.value = plant.petSafe;
-            careTip.value = plant.careTip;
+            // Map plantData keys to form fields correctly
+            commonName.value = plant.commonName || '';
+            scientificName.value = plant.scientificName || '';
+            category.value = plant.category || '';
+            difficulty.value = plant.difficulty || '';
+            origin.value = plant.origin || '';
+            watering.value = plant.watering || '';
+            light.value = plant.light || '';
+            soilType.value = plant.soil || '';           // data key is "soil", not "soilType"
+            temperature.value = plant.temperature || '';
+            careTip.value = plant.tip || '';              // data key is "tip", not "careTip"
+            funFact.value = plant.funFact || '';
             plantImage.value = '';
 
+            // Convert boolean petSafe to select string
+            if (plant.petSafe === true) {
+                petSafe.value = 'Pet safe';
+            } else if (plant.petSafe === false) {
+                petSafe.value = 'Not pet safe';
+            } else {
+                petSafe.value = 'Unknown';
+            }
+
+            // Convert problems array to readable string
+            if (Array.isArray(plant.problems) && plant.problems.length > 0) {
+                commonProblems.value = plant.problems.map(p => p.name).join(', ');
+            } else {
+                commonProblems.value = '';
+            }
+
+            // Store the plant's catalog image path
+            currentImageSrc = plant.image || null;
+
+            // Save original values for change detection
             originalValues = {
-                commonName: plant.commonName,
-                scientificName: plant.scientificName,
-                category: plant.category,
-                difficulty: plant.difficulty,
-                watering: plant.watering,
-                light: plant.light,
-                petSafe: plant.petSafe,
-                careTip: plant.careTip
+                commonName: commonName.value,
+                scientificName: scientificName.value,
+                category: category.value,
+                difficulty: difficulty.value,
+                origin: origin.value,
+                watering: watering.value,
+                light: light.value,
+                soilType: soilType.value,
+                temperature: temperature.value,
+                petSafe: petSafe.value,
+                commonProblems: commonProblems.value,
+                careTip: careTip.value,
+                funFact: funFact.value
             };
 
             changeBadge.style.display = 'none';
             errorMessage.style.display = 'none';
 
-            previewImage.style.display = 'none';
-            previewPlaceholder.style.display = 'block';
+            // Update breadcrumb
+            breadcrumbName.textContent = 'Edit \u2014 ' + plant.commonName;
+
+            // Show the existing plant image in preview
+            if (currentImageSrc) {
+                previewImage.src = currentImageSrc;
+                previewImage.style.display = 'block';
+                previewPlaceholder.style.display = 'none';
+            } else {
+                previewImage.style.display = 'none';
+                previewPlaceholder.style.display = 'block';
+            }
 
             updatePreview();
 
@@ -718,13 +1263,19 @@
         function updatePreview() {
             previewName.textContent = commonName.value.trim() || 'Plant Name';
             previewScientific.textContent = scientificName.value.trim() || 'Scientific name';
-            previewCategory.textContent = category.value || '—';
-            previewDifficulty.textContent = difficulty.value || '—';
-            previewWatering.textContent = watering.value.trim() || '—';
-            previewLight.textContent = light.value.trim() || '—';
-            previewPetSafe.textContent = petSafe.value || '—';
-            previewTip.textContent = careTip.value.trim() || '—';
+            previewCategory.textContent = category.value || '\u2014';
+            previewDifficulty.textContent = difficulty.value || '\u2014';
+            previewWatering.textContent = watering.value.trim() || '\u2014';
+            previewLight.textContent = light.value.trim() || '\u2014';
+            previewPetSafe.textContent = petSafe.value || '\u2014';
+            previewTip.textContent = careTip.value.trim() || '\u2014';
+            previewOrigin.textContent = origin.value.trim() || '\u2014';
+            previewSoilType.textContent = soilType.value.trim() || '\u2014';
+            previewTemperature.textContent = temperature.value.trim() || '\u2014';
+            previewCommonProblems.textContent = commonProblems.value.trim() || '\u2014';
+            previewFunFact.textContent = funFact.value.trim() || '\u2014';
 
+            // Handle image: user-uploaded file takes priority, otherwise show existing plant image
             const file = plantImage.files[0];
             if (file) {
                 const reader = new FileReader();
@@ -735,28 +1286,55 @@
                 };
                 reader.readAsDataURL(file);
             }
+            // If no new file uploaded, keep the existing image (already set in loadPlant)
         }
 
         /* ── Detect unsaved changes ── */
         function checkChanges() {
             if (!currentPlant) return;
+
             const changed =
                 commonName.value !== originalValues.commonName ||
                 scientificName.value !== originalValues.scientificName ||
                 category.value !== originalValues.category ||
                 difficulty.value !== originalValues.difficulty ||
+                origin.value !== originalValues.origin ||
                 watering.value !== originalValues.watering ||
                 light.value !== originalValues.light ||
+                soilType.value !== originalValues.soilType ||
+                temperature.value !== originalValues.temperature ||
                 petSafe.value !== originalValues.petSafe ||
+                commonProblems.value !== originalValues.commonProblems ||
                 careTip.value !== originalValues.careTip ||
+                funFact.value !== originalValues.funFact ||
                 plantImage.files.length > 0;
 
             changeBadge.style.display = changed ? 'inline-flex' : 'none';
         }
 
-        [commonName, scientificName, category, difficulty, watering, light, petSafe, careTip]
-            .forEach(field => field.addEventListener('input', () => { updatePreview(); checkChanges(); }));
-        plantImage.addEventListener('change', () => { updatePreview(); checkChanges(); });
+        [
+            commonName,
+            scientificName,
+            category,
+            difficulty,
+            origin,
+            watering,
+            light,
+            soilType,
+            temperature,
+            petSafe,
+            commonProblems,
+            careTip,
+            funFact
+        ].forEach(field => field.addEventListener('input', () => {
+            updatePreview();
+            checkChanges();
+        }));
+
+        plantImage.addEventListener('change', () => {
+            updatePreview();
+            checkChanges();
+        });
 
         /* ── Save form ── */
         function showError(msg) {
@@ -802,41 +1380,6 @@
         }
 
         modalGoBtn.addEventListener('click', () => { clearInterval(countdownTimer); window.location.href = 'admin-dashboard.html'; });
-
-        /* ── Delete Flow ── */
-        const deleteModal = document.getElementById('deleteModal');
-        const deletePlantName = document.getElementById('deletePlantName');
-        const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
-        const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
-        const deletePlantBtn = document.getElementById('deletePlantBtn');
-
-        const deleteSuccessModal = document.getElementById('deleteSuccessModal');
-        const deleteSuccessGoBtn = document.getElementById('deleteSuccessGoBtn');
-        const deleteCountdownEl = document.getElementById('deleteCountdown');
-        let deleteCountdownTimer = null;
-
-        deletePlantBtn.addEventListener('click', () => {
-            if (!currentPlant) return;
-            deletePlantName.textContent = currentPlant.commonName;
-            deleteModal.classList.add('visible');
-        });
-
-        cancelDeleteBtn.addEventListener('click', () => { deleteModal.classList.remove('visible'); });
-
-        confirmDeleteBtn.addEventListener('click', () => {
-            deleteModal.classList.remove('visible');
-            deleteSuccessModal.classList.add('visible');
-
-            let seconds = 5;
-            deleteCountdownEl.textContent = seconds;
-            deleteCountdownTimer = setInterval(() => {
-                seconds--;
-                deleteCountdownEl.textContent = seconds;
-                if (seconds <= 0) { clearInterval(deleteCountdownTimer); window.location.href = 'admin-dashboard.html'; }
-            }, 1000);
-        });
-
-        deleteSuccessGoBtn.addEventListener('click', () => { clearInterval(deleteCountdownTimer); window.location.href = 'admin-dashboard.html'; });
     </script>
 </body>
 
