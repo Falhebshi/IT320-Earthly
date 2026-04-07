@@ -147,6 +147,211 @@
             background: #e3f0df;
         }
 
+
+        .notification-wrap {
+            position: relative;
+        }
+
+        .notification-toggle {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.55rem;
+            padding: 0.65rem 1rem;
+            border-radius: 8px;
+            border: 1px solid rgba(45, 90, 61, 0.08);
+            background: rgba(255, 255, 255, 0.6);
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.25s ease;
+        }
+
+        .notification-toggle:hover,
+        .notification-toggle.open {
+            background: var(--green-wash);
+            color: var(--green-deep);
+            border-color: rgba(45, 90, 61, 0.14);
+        }
+
+        .notification-icon {
+            width: 18px;
+            height: 18px;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+
+        .notification-badge {
+            min-width: 22px;
+            height: 22px;
+            padding: 0 0.42rem;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: rgb(218, 21, 21);
+            color: var(--text-light);
+            font-size: 0.76rem;
+            font-weight: 600;
+            line-height: 1;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .notification-panel {
+            position: absolute;
+            top: calc(100% + 0.8rem);
+            right: 0;
+            width: min(360px, calc(100vw - 2rem));
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border-soft);
+            border-radius: 20px;
+            box-shadow: var(--shadow-lg);
+            padding: 1rem;
+            opacity: 0;
+            transform: translateY(10px);
+            pointer-events: none;
+            transition: opacity 0.22s ease, transform 0.22s ease;
+        }
+
+        .notification-panel.show {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .notification-head {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 1rem;
+            padding-bottom: 0.85rem;
+            margin-bottom: 0.9rem;
+            border-bottom: 1px solid rgba(45, 90, 61, 0.08);
+        }
+
+        .notification-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.15rem;
+            color: var(--green-deep);
+            margin-bottom: 0.2rem;
+        }
+
+        .notification-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.88rem;
+            line-height: 1.5;
+            font-weight: 300;
+        }
+
+        .notification-list {
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .notification-item {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 0.8rem;
+            align-items: start;
+            padding: 0.85rem;
+            border-radius: 16px;
+            background: linear-gradient(180deg, #f9fcf8, #ffffff);
+            border: 1px solid rgba(45, 90, 61, 0.07);
+        }
+
+        .notification-item.active-reminder {
+            background: linear-gradient(180deg, #eef7eb, #ffffff);
+            border-color: rgba(74, 124, 92, 0.14);
+        }
+
+        .notification-dot {
+            width: 42px;
+            height: 42px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--green-wash);
+            color: var(--green-deep);
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .notification-copy h3 {
+            font-size: 0.98rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.18rem;
+        }
+
+        .notification-copy p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.55;
+            font-weight: 300;
+        }
+
+        .notification-meta {
+            margin-top: 0.5rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.32rem 0.6rem;
+            border-radius: 999px;
+            background: #f3f7f1;
+            color: var(--green-deep);
+            font-size: 0.78rem;
+            font-weight: 500;
+        }
+
+
+        .notification-actions {
+            margin-top: 0.7rem;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .notification-done-btn {
+            padding: 0.5rem 0.85rem;
+            font-size: 0.85rem;
+            border-radius: 10px;
+        }
+
+        .notification-empty {
+            text-align: center;
+            padding: 1.3rem 1rem 1rem;
+            color: var(--text-secondary);
+        }
+
+        .notification-empty-icon {
+            width: 52px;
+            height: 52px;
+            margin: 0 auto 0.7rem;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--green-wash);
+            color: var(--green-deep);
+            font-size: 1.35rem;
+        }
+
+        .notification-empty-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            color: var(--green-deep);
+            margin-bottom: 0.28rem;
+        }
+
+        .notification-empty p {
+            font-size: 0.9rem;
+            line-height: 1.55;
+            font-weight: 300;
+        }
+
         .page {
             padding: 7.4rem 5% 3rem;
             position: relative;
@@ -706,7 +911,6 @@
             transform: scaleX(1);
         }
 
-        /* ---- 7-day history strip ---- */
         .streak-footer {
             display: flex;
             justify-content: flex-end;
@@ -907,14 +1111,74 @@
             position: relative;
             z-index: 1;
         }
+
+        @media (max-width: 860px) {
+            .notification-panel {
+                right: auto;
+                left: 0;
+            }
+
+            .notification-toggle span.label-text {
+                display: none;
+            }
+        }
     </style>
 </head>
 
 <body>
     <nav id="navbar"> <a href="index.html" class="nav-logo">Earthly</a>
-        <div class="nav-right"> <a href="user-dashboard.html" class="nav-link active">Dashboard</a> <a
-                href="plant-catalog.html" class="nav-link">Catalog</a> <a href="login.html" class="btn btn-outline">Log
-                out</a> </div>
+        <div class="nav-right">
+
+            <div class="notification-wrap">
+                <button class="notification-toggle" id="notificationToggle" type="button" aria-expanded="false"
+                    aria-controls="notificationPanel">
+                    <svg class="notification-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M15 17h5l-1.4-1.4A2 2 0 0 1 18 14.2V11a6 6 0 1 0-12 0v3.2a2 2 0 0 1-.6 1.4L4 17h5" />
+                        <path d="M9.5 17a2.5 2.5 0 0 0 5 0" />
+                    </svg>
+                    <span class="label-text">Reminders</span>
+                    <span class="notification-badge" id="notificationBadge">3</span>
+                </button>
+
+                <div class="notification-panel" id="notificationPanel">
+                    <div class="notification-head">
+                        <div>
+                            <h3 class="notification-title">Watering reminders</h3>
+                            <p class="notification-subtitle">A quick look at today’s watering alerts and what needs
+                                your attention next.</p>
+                        </div>
+                        <span class="notification-badge" id="notificationPanelBadge">3</span>
+                    </div>
+
+                    <div class="notification-list" id="notificationList">
+                        <article class="notification-item active-reminder">
+                            <div class="notification-dot">💧</div>
+                            <div class="notification-copy">
+                                <h3>Ivy needs watering today!</h3>
+                                <div class="notification-actions">
+                                    <button class="btn btn-soft notification-done-btn" type="button">Done</button>
+                                </div>
+                            </div>
+                        </article>
+
+                        <article class="notification-item">
+                            <div class="notification-dot">💧</div>
+                            <div class="notification-copy">
+                                <h3>Olive needs watering today!</h3>
+                                <div class="notification-actions">
+                                    <button class="btn btn-soft notification-done-btn" type="button">Done</button>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </div>
+
+            <a href="user-dashboard.html" class="nav-link active">Dashboard</a>
+            <a href="plant-catalog.html" class="nav-link">Catalog</a>
+            <a href="login.html" class="btn btn-outline">Log out</a>
+        </div>
     </nav>
     <main class="page">
         <div class="bg-shape-1"></div>
@@ -1194,45 +1458,110 @@
     </main>
 
     <script>
-window.addEventListener('scroll', () => {
-	document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 20);
-});
-const todayDate = document.getElementById('todayDate');
-const dueTodayCount = document.getElementById('dueTodayCount');
-const completedCount = document.getElementById('completedCount');
-const progressText = document.getElementById('progressText');
-const progressFill = document.getElementById('progressFill');
-const now = new Date();
-todayDate.textContent = now.toLocaleDateString('en-US', {
-	weekday: 'long',
-	month: 'long',
-	day: 'numeric'
-});
-const allTaskCards = Array.from(document.querySelectorAll('[data-task]'));
-const taskButtons = Array.from(document.querySelectorAll('.task-btn'));
+        window.addEventListener('scroll', () => {
+            document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 20);
+        });
 
-function updateDashboardStats() {
-	const completed = allTaskCards.filter(card => card.classList.contains('completed')).length;
-	const total = allTaskCards.length;
-	const due = total - completed;
-	completedCount.textContent = completed;
-	dueTodayCount.textContent = due;
-	progressText.textContent = `${completed} of ${total} tasks completed`;
-	progressFill.style.width = `${(completed / total) * 100}%`;
-}
-taskButtons.forEach(button => {
-	button.addEventListener('click', () => {
-		const card = button.closest('[data-task]');
-		card.classList.add('completed');
-		button.textContent = 'Completed';
-		button.classList.remove('btn-primary');
-		button.classList.add('btn-soft');
-		button.disabled = true;
-		updateDashboardStats();
-	});
-});
-updateDashboardStats();
-</script>
+        const notificationToggle = document.getElementById('notificationToggle');
+        const notificationPanel = document.getElementById('notificationPanel');
+        const notificationList = document.getElementById('notificationList');
+        const notificationBadge = document.getElementById('notificationBadge');
+        const notificationPanelBadge = document.getElementById('notificationPanelBadge');
+
+        notificationToggle.addEventListener('click', () => {
+            const isOpen = notificationPanel.classList.toggle('show');
+            notificationToggle.classList.toggle('open', isOpen);
+            notificationToggle.setAttribute('aria-expanded', String(isOpen));
+        });
+
+        document.addEventListener('click', (event) => {
+            if (!notificationPanel.contains(event.target) && !notificationToggle.contains(event.target)) {
+                notificationPanel.classList.remove('show');
+                notificationToggle.classList.remove('open');
+                notificationToggle.setAttribute('aria-expanded', 'false');
+            }
+        });
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') {
+                notificationPanel.classList.remove('show');
+                notificationToggle.classList.remove('open');
+                notificationToggle.setAttribute('aria-expanded', 'false');
+            }
+        });
+
+        function updateNotificationState() {
+            const notificationItems = notificationList.querySelectorAll('.notification-item');
+            const count = notificationItems.length;
+
+            notificationBadge.textContent = count;
+            notificationBadge.style.display = count > 0 ? 'inline-flex' : 'none';
+            notificationPanelBadge.textContent = count;
+            notificationPanelBadge.style.display = count > 0 ? 'inline-flex' : 'none';
+
+            if (count === 0) {
+                notificationList.innerHTML = `
+            <div class="notification-empty">
+                <div class="notification-empty-icon">🌿</div>
+                <div class="notification-empty-title">All done!</div>
+                <p>No reminders right now. Your plants are all caught up.</p>
+            </div>
+        `;
+            }
+        }
+
+        function bindNotificationDoneButtons() {
+            const doneButtons = notificationList.querySelectorAll('.notification-done-btn');
+            doneButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const item = button.closest('.notification-item');
+                    if (item) {
+                        item.remove();
+                        updateNotificationState();
+                    }
+                });
+            });
+        }
+
+        bindNotificationDoneButtons();
+        updateNotificationState();
+
+        const todayDate = document.getElementById('todayDate');
+        const dueTodayCount = document.getElementById('dueTodayCount');
+        const completedCount = document.getElementById('completedCount');
+        const progressText = document.getElementById('progressText');
+        const progressFill = document.getElementById('progressFill');
+        const now = new Date();
+        todayDate.textContent = now.toLocaleDateString('en-US', {
+            weekday: 'long',
+            month: 'long',
+            day: 'numeric'
+        });
+        const allTaskCards = Array.from(document.querySelectorAll('[data-task]'));
+        const taskButtons = Array.from(document.querySelectorAll('.task-btn'));
+
+        function updateDashboardStats() {
+            const completed = allTaskCards.filter(card => card.classList.contains('completed')).length;
+            const total = allTaskCards.length;
+            const due = total - completed;
+            completedCount.textContent = completed;
+            dueTodayCount.textContent = due;
+            progressText.textContent = `${completed} of ${total} tasks completed`;
+            progressFill.style.width = `${(completed / total) * 100}%`;
+        }
+        taskButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const card = button.closest('[data-task]');
+                card.classList.add('completed');
+                button.textContent = 'Completed';
+                button.classList.remove('btn-primary');
+                button.classList.add('btn-soft');
+                button.disabled = true;
+                updateDashboardStats();
+            });
+        });
+        updateDashboardStats();
+    </script>
 
 </body>
 
