@@ -344,8 +344,8 @@
   <nav id="navbar">
     <a href="index.html" class="nav-logo">Earthly</a>
     <div class="nav-links">
-      <a href="login.html" class="btn btn-ghost">Log in</a>
-      <a href="register.html" class="btn btn-primary">Register</a>
+      <a href="login.php" class="btn btn-ghost">Log in</a>
+      <a href="register.php" class="btn btn-primary">Register</a>
     </div>
   </nav>
 
@@ -367,7 +367,7 @@
           <div id="errorMessage" class="message error"></div>
           <div id="successMessage" class="message success"></div>
 
-          <form id="loginForm" novalidate>
+          <form id="loginForm" action= "login_process.php" method="POST" novalidate>
             <div class="form-group">
               <label for="email">Email Address</label>
               <input type="email" id="email" name="email" placeholder="you@example.com">
@@ -386,7 +386,7 @@
           <div class="divider">New to Earthly?</div>
 
           <p class="bottom-link">
-            Don’t have an account? <a href="register.html">Create one here</a>
+            Don’t have an account? <a href="register.php">Create one here</a>
           </p>
         </div>
       </div>
