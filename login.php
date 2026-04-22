@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -364,8 +365,15 @@
             Access your plant dashboard, care tasks, and watering streak in one place.
           </p>
 
-          <div id="errorMessage" class="message error"></div>
-          <div id="successMessage" class="message success"></div>
+          <?php if (!empty($_SESSION['login_error'])): ?>
+  <div class="message error" style="display:block;"><?= htmlspecialchars($_SESSION['login_error']) ?></div>
+  <?php unset($_SESSION['login_error']); ?>
+<?php endif; ?>
+
+<?php if (!empty($_SESSION['register_success'])): ?>
+  <div class="message success" style="display:block;">Account created successfully! Please log in.</div>
+  <?php unset($_SESSION['register_success']); ?>
+<?php endif; ?>
 
           <form id="loginForm" action= "login_process.php" method="POST" novalidate>
             <div class="form-group">
@@ -398,60 +406,6 @@
   <script>
     window.addEventListener('scroll', () => {
       document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 20);
-    });
-
-    const form = document.getElementById('loginForm');
-    const errorMessage = document.getElementById('errorMessage');
-    const successMessage = document.getElementById('successMessage');
-
-    function showError(message) {
-      successMessage.style.display = 'none';
-      errorMessage.textContent = message;
-      errorMessage.style.display = 'block';
-    }
-
-    function showSuccess(message) {
-      errorMessage.style.display = 'none';
-      successMessage.innerHTML = message;
-      successMessage.style.display = 'block';
-    }
-
-    function isValidEmail(email) {
-      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-    }
-
-    form.addEventListener('submit', function(e) {
-      e.preventDefault();
-
-      const email = document.getElementById('email').value.trim();
-      const password = document.getElementById('password').value;
-
-      if (!email || !password) {
-        showError('Please enter your email and password.');
-        return;
-      }
-
-      if (!isValidEmail(email)) {
-        showError('Please enter a valid email address.');
-        return;
-      }
-
-      if (password.length < 6) {
-        showError('Password is incorrect.');
-        return;
-      }
-
-      const isAdmin = email.toLowerCase() === 'admin@earthly.com';
-
-      showSuccess('Login successful. Redirecting to your dashboard...');
-
-      setTimeout(() => {
-        if (isAdmin) {
-          window.location.href = 'admin-dashboard.html';
-        } else {
-          window.location.href = 'user-dashboard.html';
-        }
-      }, 1200);
     });
   </script>
 </body>
