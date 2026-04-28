@@ -1255,7 +1255,7 @@ $progressPercent = $totalTasks > 0 ? ($completedTasks / $totalTasks) * 100 : 0;
                     </div>
                     <div class="mini-panel">
                         <div class="label">This week’s watering streak</div>
-                        <span id="streakCount"><?php echo $currentStreak; ?></span>
+                       <div class="value"><span id="streakCount"><?php echo $currentStreak; ?></span> days</div>
                         <div class="sub">Complete today’s tasks to keep your streak active.</div>
 
                     </div>
@@ -1330,10 +1330,11 @@ $progressPercent = $totalTasks > 0 ? ($completedTasks / $totalTasks) * 100 : 0;
                 <div class="progress-wrap">
                    <span id="progressText"><?php echo $completedTasks; ?> of <?php echo $totalTasks; ?> tasks completed</span>
                     <div class="progress-bar">
-                        <div class="progress-fill" id="progressFill" style="width: <?php echo $progressPercent; ?>%;">
+                        <div class="progress-fill" id="progressFill" style="width: <?php echo $progressPercent; ?>%;"></div>
                     </div>
                 </div>
             </div>
+                
             <section class="section-card watering-card">
                 <!-- Decorative floating leaves -->
                 <svg class="streak-leaf streak-leaf-1" viewBox="0 0 80 80" fill="none"
@@ -1436,68 +1437,40 @@ $progressPercent = $totalTasks > 0 ? ($completedTasks / $totalTasks) * 100 : 0;
                                 simple care summary. </p>
                         </div> <a href="manage-plants.html" class="btn btn-outline">Manage Plants</a>
                     </div>
-                    <div class="plants-stack">
-                        <article class="plant-card-horizontal">
-                            <div class="plant-copy">
-                                <div class="plant-topline">
-                                    <div>
-                                        <h3 class="nickname">Olive</h3>
-                                        <p class="official-name">Snake Plant • Dracaena trifasciata</p>
-                                    </div> <span class="plant-location">Living room</span>
-                                </div>
-                                <div class="plant-summary">
-                                    <p><strong>Next watering:</strong> In 5 days</p>
-                                    <p><strong>Light:</strong> Bright indirect to low light</p>
-                                    <p><strong>Note:</strong> Doing well near the TV stand with low-maintenance
-                                        care.</p>
-                                </div>
-                                <div class="plant-note"> <strong>Tip:</strong> Let the soil dry well before watering
-                                    again. Snake plants usually do better with less water than too much. </div>
-                            </div>
-                            <div class="plant-image-wrap"> <img class="plant-image" src="images/snake-plant.png"
-                                    alt="Snake Plant"> </div>
-                        </article>
-                        <article class="plant-card-horizontal">
-                            <div class="plant-copy">
-                                <div class="plant-topline">
-                                    <div>
-                                        <h3 class="nickname">Ivy</h3>
-                                        <p class="official-name">Pothos • Epipremnum aureum</p>
-                                    </div> <span class="plant-location">Bedroom</span>
-                                </div>
-                                <div class="plant-summary">
-                                    <p><strong>Next watering:</strong> Today</p>
-                                    <p><strong>Light:</strong> Bright indirect light</p>
-                                    <p><strong>Note:</strong> Needs a quick check today because the soil dries
-                                        faster in this room.</p>
-                                </div>
-                                <div class="plant-note"> <strong>Tip:</strong> If the leaves look limp, check the
-                                    soil first. Pothos usually like slightly dry soil between waterings. </div>
-                            </div>
-                            <div class="plant-image-wrap"> <img class="plant-image" src="images/pothos.png"
-                                    alt="Pothos"> </div>
-                        </article>
-                        <article class="plant-card-horizontal">
-                            <div class="plant-copy">
-                                <div class="plant-topline">
-                                    <div>
-                                        <h3 class="nickname">Luna</h3>
-                                        <p class="official-name">Monstera • Monstera deliciosa</p>
-                                    </div> <span class="plant-location">Window corner</span>
-                                </div>
-                                <div class="plant-summary">
-                                    <p><strong>Next watering:</strong> Tomorrow</p>
-                                    <p><strong>Light:</strong> Bright indirect light</p>
-                                    <p><strong>Note:</strong> Growing steadily and likes being rotated for balanced
-                                        light.</p>
-                                </div>
-                                <div class="plant-note"> <strong>Tip:</strong> Rotate your monstera every week so
-                                    each side gets balanced light and the plant grows more evenly. </div>
-                            </div>
-                            <div class="plant-image-wrap"> <img class="plant-image" src="images/Monstera.png"
-                                    alt="Monstera"> </div>
-                        </article>
+                    <?php if (empty($plants)): ?>
+    <p>No plants added yet.</p>
+<?php else: ?>
+    <?php foreach ($plants as $plant): ?>
+        <article class="plant-card-horizontal">
+            <div class="plant-copy">
+                <div class="plant-topline">
+                    <div>
+                        <h3 class="nickname"><?php echo htmlspecialchars($plant['nickname'] ?: $plant['common_name']); ?></h3>
+                        <p class="official-name">
+                            <?php echo htmlspecialchars($plant['common_name']); ?> •
+                            <?php echo htmlspecialchars($plant['scientific_name']); ?>
+                        </p>
                     </div>
+                    <span class="plant-location"><?php echo htmlspecialchars($plant['location'] ?: 'No location'); ?></span>
+                </div>
+
+                <div class="plant-summary">
+                    <p><strong>Watering:</strong> <?php echo htmlspecialchars($plant['watering']); ?></p>
+                    <p><strong>Light:</strong> <?php echo htmlspecialchars($plant['light']); ?></p>
+                    <p><strong>Note:</strong> <?php echo htmlspecialchars($plant['note'] ?: 'No notes'); ?></p>
+                </div>
+
+                <div class="plant-note">
+                    <strong>Tip:</strong> <?php echo htmlspecialchars($plant['tip']); ?>
+                </div>
+            </div>
+
+            <div class="plant-image-wrap">
+                <img class="plant-image" src="images/<?php echo htmlspecialchars($plant['image']); ?>" alt="Plant image">
+            </div>
+        </article>
+    <?php endforeach; ?>
+<?php endif; ?>
                 </div>
             </div>
         </section>
