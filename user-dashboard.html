@@ -1,4 +1,58 @@
+<?php
+require_once 'auth.php';
+require_once 'db.php';
 
+$user_id = $_SESSION['user_id'];
+$first_name = $_SESSION['first_name'] ?? 'User';
+$today = date('Y-m-d');
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['complete_task'])) {
+    $task_id = $_POST['task_id'];
+
+    $stmt = $pdo->prepare("
+        UPDATE care_task ct
+        JOIN user_plant up ON ct.user_plant_id = up.user_plant_id
+        SET ct.status = 'completed'
+        WHERE ct.task_id = ? AND up.user_id = ?
+    ");
+    $stmt->execute([$task_id, $user_id]);
+
+    header("Location: user-dashboard.php");
+    exit;
+}
+
+$stmt = $pdo->prepare("
+    SELECT up.user_plant_id, up.nickname, up.location, up.note,
+           p.common_name, p.scientific_name, p.watering, p.light, p.tip, p.image
+    FROM user_plant up
+    JOIN plant p ON up.plant_id = p.plant_id
+    WHERE up.user_id = ?
+");
+$stmt->execute([$user_id]);
+$plants = $stmt->fetchAll();
+
+$stmt = $pdo->prepare("
+    SELECT ct.task_id, ct.task_type, ct.status, ct.task_date,
+           up.nickname, up.location, p.common_name
+    FROM care_task ct
+    JOIN user_plant up ON ct.user_plant_id = up.user_plant_id
+    JOIN plant p ON up.plant_id = p.plant_id
+    WHERE up.user_id = ? AND ct.task_date = ?
+");
+$stmt->execute([$user_id, $today]);
+$tasks = $stmt->fetchAll();
+
+$stmt = $pdo->prepare("SELECT * FROM streak WHERE user_id = ?");
+$stmt->execute([$user_id]);
+$streak = $stmt->fetch();
+
+$currentStreak = $streak['current_streak'] ?? 0;
+$totalPlants = count($plants);
+$totalTasks = count($tasks);
+$completedTasks = count(array_filter($tasks, fn($t) => $t['status'] === 'completed'));
+$dueTasks = $totalTasks - $completedTasks;
+$progressPercent = $totalTasks > 0 ? ($completedTasks / $totalTasks) * 100 : 0;
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -1176,7 +1230,7 @@
                 </div>
             </div>
 
-            <a href="user-dashboard.html" class="nav-link active">Dashboard</a>
+<a href="user-dashboard.php" class="nav-link active">Dashboard</a>
             <a href="plant-catalog.html" class="nav-link">Catalog</a>
             <a href="logout.php">Logout</a>   
              </div>
@@ -1187,7 +1241,7 @@
         <section class="dashboard">
             <section class="hero">
                 <div class="hero-copy"> <span class="eyebrow">Your plant dashboard</span>
-                    <h1>Good afternoon, Sarah.</h1>
+                    <a href="user-dashboard.php" class="nav-link active">Dashboard</a>
                     <p> Here’s a quick view of your plants, today’s care tasks, and your current streak. Stay consistent
                         and keep your plants thriving one small step at a time. </p>
                     <div class="hero-actions"> <a href="plant-catalog.html" class="btn btn-primary">Browse Plant
@@ -1210,12 +1264,12 @@
             <section class="stats-grid">
                 <div class="stat-card">
                     <div class="stat-label">Saved Plants</div>
-                    <div class="stat-value">3</div>
+                   <div class="stat-value"><?php echo $totalPlants; ?></div>
                     <div class="stat-sub">Plants currently in your personal collection.</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-label">Due Today</div>
-                    <div class="stat-value" id="dueTodayCount">3</div>
+                    <div class="stat-value" id="dueTodayCount"><?php echo $dueTasks; ?></div>
                     <div class="stat-sub">Care tasks that still need attention today.</div>
                 </div>
                 <div class="stat-card">
@@ -1225,7 +1279,7 @@
                 </div>
                 <div class="stat-card">
                     <div class="stat-label">Current Streak</div>
-                    <div class="stat-value" id="streakCountSecondary">6</div>
+                    <span id="streakCount"><?php echo $currentStreak; ?></span>
                     <div class="stat-sub">Keep going to build a stronger care habit.</div>
                 </div>
             </section>
