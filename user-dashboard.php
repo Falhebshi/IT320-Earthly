@@ -1437,6 +1437,7 @@ $progressPercent = $totalTasks > 0 ? ($completedTasks / $totalTasks) * 100 : 0;
                                 simple care summary. </p>
                         </div> <a href="manage-plants.html" class="btn btn-outline">Manage Plants</a>
                     </div>
+                    <div class="plants-stack">
                     <?php if (empty($plants)): ?>
     <p>No plants added yet.</p>
 <?php else: ?>
@@ -1471,6 +1472,7 @@ $progressPercent = $totalTasks > 0 ? ($completedTasks / $totalTasks) * 100 : 0;
         </article>
     <?php endforeach; ?>
 <?php endif; ?>
+</div>
                 </div>
             </div>
         </section>
