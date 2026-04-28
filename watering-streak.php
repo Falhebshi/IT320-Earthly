@@ -1,3 +1,62 @@
+<?php
+require_once 'auth.php';
+require_once 'db.php';
+
+$user_id = $_SESSION['user_id'];
+$today = date('Y-m-d');
+
+$stmt = $pdo->prepare("SELECT * FROM streak WHERE user_id = ?");
+$stmt->execute([$user_id]);
+$streak = $stmt->fetch();
+
+if (!$streak) {
+    $insert = $pdo->prepare("
+        INSERT INTO streak (user_id, current_streak, highest_streak, last_care_date)
+        VALUES (?, 0, 0, NULL)
+    ");
+    $insert->execute([$user_id]);
+
+    $stmt = $pdo->prepare("SELECT * FROM streak WHERE user_id = ?");
+    $stmt->execute([$user_id]);
+    $streak = $stmt->fetch();
+}
+
+$stmt = $pdo->prepare("
+    SELECT COUNT(*) 
+    FROM care_task ct
+    JOIN user_plant up ON ct.user_plant_id = up.user_plant_id
+    WHERE up.user_id = ? AND ct.task_date = ?
+");
+$stmt->execute([$user_id, $today]);
+$totalTodayTasks = $stmt->fetchColumn();
+
+$stmt = $pdo->prepare("
+    SELECT COUNT(*) 
+    FROM care_task ct
+    JOIN user_plant up ON ct.user_plant_id = up.user_plant_id
+    WHERE up.user_id = ? AND ct.task_date = ? AND ct.status = 'completed'
+");
+$stmt->execute([$user_id, $today]);
+$completedTodayTasks = $stmt->fetchColumn();
+
+$todayStatus = ($totalTodayTasks > 0 && $completedTodayTasks == $totalTodayTasks) ? 'Done' : 'Pending';
+
+$stmt = $pdo->prepare("
+    SELECT COUNT(DISTINCT ct.task_date)
+    FROM care_task ct
+    JOIN user_plant up ON ct.user_plant_id = up.user_plant_id
+    WHERE up.user_id = ?
+      AND ct.status = 'completed'
+      AND YEARWEEK(ct.task_date, 1) = YEARWEEK(CURDATE(), 1)
+");
+$stmt->execute([$user_id]);
+$weekCount = $stmt->fetchColumn();
+
+$completionRate = round(($weekCount / 7) * 100);
+$nextMilestone = $streak['current_streak'] < 10 ? 10 : (($streak['current_streak'] < 30) ? 30 : 50);
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -640,12 +699,12 @@
 				<div class="hero-side">
 					<div class="mini-panel">
 						<div class="label">Current streak</div>
-						<div class="value" id="currentStreak">6</div>
+						<div class="value" id="currentStreak"><?php echo $streak['current_streak']; ?></div>
 						<div class="sub">Water all plants today to continue your streak.</div>
 					</div>
 					<div class="mini-panel">
 						<div class="label">Longest streak</div>
-						<div class="value" id="longestStreak">8</div>
+						<div class="value" id="longestStreak"><?php echo $streak['highest_streak']; ?></div>
 						<div class="sub">Your best consistency record so far in this demo view.</div>
 					</div>
 				</div>
@@ -653,22 +712,22 @@
 			<section class="stats-grid">
 				<div class="stat-card">
 					<div class="stat-label">This Week</div>
-					<div class="stat-value" id="weekCount">6 / 7</div>
+					<div class="stat-value" id="weekCount"><?php echo $weekCount; ?> / 7</div>
 					<div class="stat-sub">Days completed in the current week.</div>
 				</div>
 				<div class="stat-card">
 					<div class="stat-label">Today’s Status</div>
-					<div class="stat-value" id="todayStatus">Pending</div>
+				<div class="stat-value" id="todayStatus"><?php echo $todayStatus; ?></div>
 					<div class="stat-sub">Complete watering to mark today as done.</div>
 				</div>
 				<div class="stat-card">
 					<div class="stat-label">Completion Rate</div>
-					<div class="stat-value" id="completionRate">86%</div>
+				<div class="stat-value" id="completionRate"><?php echo $completionRate; ?>%</div>
 					<div class="stat-sub">A simple weekly consistency snapshot.</div>
 				</div>
 				<div class="stat-card">
 					<div class="stat-label">Milestone</div>
-					<div class="stat-value" id="nextMilestone">10</div>
+				<div class="stat-value" id="nextMilestone"><?php echo $nextMilestone; ?></div>
 					<div class="stat-sub">Your next streak goal is 10 consecutive days.</div>
 				</div>
 			</section>
