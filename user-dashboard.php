@@ -1241,7 +1241,7 @@ $progressPercent = $totalTasks > 0 ? ($completedTasks / $totalTasks) * 100 : 0;
         <section class="dashboard">
             <section class="hero">
                 <div class="hero-copy"> <span class="eyebrow">Your plant dashboard</span>
-                    <a href="user-dashboard.php" class="nav-link active">Dashboard</a>
+                   <h1>Good afternoon, <?php echo htmlspecialchars($first_name); ?>.</h1>
                     <p> Here’s a quick view of your plants, today’s care tasks, and your current streak. Stay consistent
                         and keep your plants thriving one small step at a time. </p>
                     <div class="hero-actions"> <a href="plant-catalog.html" class="btn btn-primary">Browse Plant
@@ -1255,7 +1255,7 @@ $progressPercent = $totalTasks > 0 ? ($completedTasks / $totalTasks) * 100 : 0;
                     </div>
                     <div class="mini-panel">
                         <div class="label">This week’s watering streak</div>
-                        <div class="value"><span id="streakCount">6</span> days</div>
+                        <span id="streakCount"><?php echo $currentStreak; ?></span>
                         <div class="sub">Complete today’s tasks to keep your streak active.</div>
 
                     </div>
@@ -1274,12 +1274,12 @@ $progressPercent = $totalTasks > 0 ? ($completedTasks / $totalTasks) * 100 : 0;
                 </div>
                 <div class="stat-card">
                     <div class="stat-label">Completed Today</div>
-                    <div class="stat-value" id="completedCount">1</div>
+                    <div class="stat-value" id="completedCount"><?php echo $completedTasks; ?></div>
                     <div class="stat-sub">Tasks you’ve already completed so far.</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-label">Current Streak</div>
-                    <span id="streakCount"><?php echo $currentStreak; ?></span>
+                    <div class="stat-value" id="streakCountSecondary"><?php echo $currentStreak; ?></div>
                     <div class="stat-sub">Keep going to build a stronger care habit.</div>
                 </div>
             </section>
@@ -1297,48 +1297,40 @@ $progressPercent = $totalTasks > 0 ? ($completedTasks / $totalTasks) * 100 : 0;
                     </div>
                 </div>
                 <div class="task-list" id="taskList">
-                    <div class="task-item completed" data-task>
-                        <div class="task-badge">💧</div>
-                        <div class="task-copy">
-                            <h3>Snake Plant — Watering completed</h3>
-                            <p>Living room • Done this morning at 9:00 AM.</p>
-                        </div>
-                        <div class="task-action"> <button class="btn btn-soft done-btn" disabled>Completed</button>
-                        </div>
-                    </div>
-                    <div class="task-item" data-task>
-                        <div class="task-badge">💧</div>
-                        <div class="task-copy">
-                            <h3>Pothos — Water today</h3>
-                            <p>Bedroom shelf • Check the top inch of soil before watering.</p>
-                        </div>
-                        <div class="task-action"> <button class="btn btn-primary task-btn">Mark as Done</button>
-                        </div>
-                    </div>
-                    <div class="task-item" data-task>
-                        <div class="task-badge">☀️</div>
-                        <div class="task-copy">
-                            <h3>Monstera — Rotate for even light</h3>
-                            <p>Near the window • Turn the pot slightly to support balanced growth.</p>
-                        </div>
-                        <div class="task-action"> <button class="btn btn-primary task-btn">Mark as Done</button>
-                        </div>
-                    </div>
-                    <div class="task-item" data-task>
-                        <div class="task-badge">🌿</div>
-                        <div class="task-copy">
-                            <h3>Pothos — Quick leaf check</h3>
-                            <p>Look for yellowing leaves and trim anything dry or damaged.</p>
-                        </div>
-                        <div class="task-action"> <button class="btn btn-primary task-btn">Mark as Done</button>
-                        </div>
-                    </div>
-                </div>
+<?php if (empty($tasks)): ?>
+    <p>No care tasks for today.</p>
+<?php else: ?>
+    <?php foreach ($tasks as $task): ?>
+        <div class="task-item <?php echo $task['status'] === 'completed' ? 'completed' : ''; ?>" data-task>
+            <div class="task-badge">💧</div>
+
+            <div class="task-copy">
+                <h3>
+                    <?php echo htmlspecialchars($task['nickname'] ?: $task['common_name']); ?>
+                    — <?php echo htmlspecialchars($task['task_type']); ?>
+                </h3>
+                <p><?php echo htmlspecialchars($task['location'] ?: 'No location'); ?></p>
+            </div>
+
+            <div class="task-action">
+                <?php if ($task['status'] === 'completed'): ?>
+                    <button class="btn btn-soft done-btn" disabled>Completed</button>
+                <?php else: ?>
+                    <form method="POST">
+                        <input type="hidden" name="task_id" value="<?php echo $task['task_id']; ?>">
+                        <button class="btn btn-primary" type="submit" name="complete_task">Mark as Done</button>
+                    </form>
+                <?php endif; ?>
+            </div>
+        </div>
+    <?php endforeach; ?>
+<?php endif; ?>
+</div>
+            
                 <div class="progress-wrap">
-                    <div class="progress-top"> <span>Daily progress</span> <span id="progressText">1 of 4 tasks
-                            completed</span> </div>
+                   <span id="progressText"><?php echo $completedTasks; ?> of <?php echo $totalTasks; ?> tasks completed</span>
                     <div class="progress-bar">
-                        <div class="progress-fill" id="progressFill"></div>
+                        <div class="progress-fill" id="progressFill" style="width: <?php echo $progressPercent; ?>%;">
                     </div>
                 </div>
             </div>
@@ -1360,7 +1352,7 @@ $progressPercent = $totalTasks > 0 ? ($completedTasks / $totalTasks) * 100 : 0;
                         <h2 class="section-title">Watering streak</h2>
                         <p class="section-desc">Keep your rhythm, watch it grow.</p>
                     </div>
-                    <a href="watering-streak.html" class="btn btn-outline">Go to Streak</a>
+                    <a href="watering-streak.php" class="btn btn-outline">Go to Streak</a>
                 </div>
 
                 <div class="streak-body">
@@ -1378,7 +1370,7 @@ $progressPercent = $totalTasks > 0 ? ($completedTasks / $totalTasks) * 100 : 0;
                                 stroke-dasharray="345.58" stroke-dashoffset="276.4" />
                         </svg>
                         <div class="streak-ring-center">
-                            <span class="streak-ring-number" id="streakRingNum">6</span>
+                            <span class="streak-ring-number" id="streakRingNum"><?php echo $currentStreak; ?></span>
                             <span class="streak-ring-unit">days</span>
                         </div>
                     </div>
@@ -1592,30 +1584,7 @@ $progressPercent = $totalTasks > 0 ? ($completedTasks / $totalTasks) * 100 : 0;
             month: 'long',
             day: 'numeric'
         });
-        const allTaskCards = Array.from(document.querySelectorAll('[data-task]'));
-        const taskButtons = Array.from(document.querySelectorAll('.task-btn'));
-
-        function updateDashboardStats() {
-            const completed = allTaskCards.filter(card => card.classList.contains('completed')).length;
-            const total = allTaskCards.length;
-            const due = total - completed;
-            completedCount.textContent = completed;
-            dueTodayCount.textContent = due;
-            progressText.textContent = `${completed} of ${total} tasks completed`;
-            progressFill.style.width = `${(completed / total) * 100}%`;
-        }
-        taskButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const card = button.closest('[data-task]');
-                card.classList.add('completed');
-                button.textContent = 'Completed';
-                button.classList.remove('btn-primary');
-                button.classList.add('btn-soft');
-                button.disabled = true;
-                updateDashboardStats();
-            });
-        });
-        updateDashboardStats();
+        
     </script>
 
 </body>
