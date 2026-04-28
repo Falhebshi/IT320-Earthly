@@ -1193,7 +1193,7 @@ $progressPercent = $totalTasks > 0 ? ($completedTasks / $totalTasks) * 100 : 0;
                         <path d="M9.5 17a2.5 2.5 0 0 0 5 0" />
                     </svg>
                     <span class="label-text">Reminders</span>
-                    <span class="notification-badge" id="notificationBadge">3</span>
+                    <span class="notification-badge" id="notificationBadge"><?php echo $dueTasks; ?></span>
                 </button>
 
                 <div class="notification-panel" id="notificationPanel">
@@ -1203,30 +1203,38 @@ $progressPercent = $totalTasks > 0 ? ($completedTasks / $totalTasks) * 100 : 0;
                             <p class="notification-subtitle">A quick look at today’s watering alerts and what needs
                                 your attention next.</p>
                         </div>
-                        <span class="notification-badge" id="notificationPanelBadge">3</span>
+                        <span class="notification-badge" id="notificationPanelBadge"><?php echo $dueTasks; ?></span>
                     </div>
-
-                    <div class="notification-list" id="notificationList">
-                        <article class="notification-item active-reminder">
-                            <div class="notification-dot">💧</div>
-                            <div class="notification-copy">
-                                <h3>Ivy needs watering today!</h3>
-                                <div class="notification-actions">
-                                    <button class="btn btn-soft notification-done-btn" type="button">Done</button>
-                                </div>
-                            </div>
-                        </article>
-
-                        <article class="notification-item">
-                            <div class="notification-dot">💧</div>
-                            <div class="notification-copy">
-                                <h3>Olive needs watering today!</h3>
-                                <div class="notification-actions">
-                                    <button class="btn btn-soft notification-done-btn" type="button">Done</button>
-                                </div>
-                            </div>
-                        </article>
+<div class="notification-list" id="notificationList">
+<?php if ($dueTasks <= 0): ?>
+    <div class="notification-empty">
+        <div class="notification-empty-icon">🌿</div>
+        <div class="notification-empty-title">All done!</div>
+        <p>No reminders right now. Your plants are all caught up.</p>
+    </div>
+<?php else: ?>
+    <?php foreach ($tasks as $task): ?>
+        <?php if ($task['status'] !== 'completed'): ?>
+            <article class="notification-item active-reminder">
+                <div class="notification-dot">💧</div>
+                <div class="notification-copy">
+                    <h3>
+                        <?php echo htmlspecialchars($task['nickname'] ?: $task['common_name']); ?>
+                        needs <?php echo htmlspecialchars(strtolower($task['task_type'])); ?> today!
+                    </h3>
+                    <div class="notification-actions">
+                        <form method="POST">
+                            <input type="hidden" name="task_id" value="<?php echo $task['task_id']; ?>">
+                            <button class="btn btn-soft notification-done-btn" type="submit" name="complete_task">Done</button>
+                        </form>
                     </div>
+                </div>
+            </article>
+        <?php endif; ?>
+    <?php endforeach; ?>
+<?php endif; ?>
+</div>
+                   
                 </div>
             </div>
 
