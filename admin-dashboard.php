@@ -5,8 +5,10 @@
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title>Admin Dashboard — Earthly</title>
+
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+
 	<style>
 	:root {
 		--green-deep: #2D5A3D;
@@ -404,63 +406,101 @@
 	}
 	</style>
 </head>
-
 <body>
-	<nav id="navbar"> <a href="index.html" class="nav-logo">Earthly</a>
-		<div class="nav-right"> <a href="admin-dashboard.html" class="nav-link active">Admin Dashboard</a> <a href="logout.php" class="btn btn-outline">Log out</a> </div>
+
+	
+	<nav id="navbar">
+		<a href="index.php" class="nav-logo">Earthly</a>
+
+		<div class="nav-right">
+			<a href="admin-dashboard.php" class="nav-link active">Admin Dashboard</a>
+			<a href="logout.php" class="btn btn-outline">Log out</a>
+		</div>
 	</nav>
+
 	<main class="page">
 		<div class="bg-shape-1"></div>
 		<div class="bg-shape-2"></div>
+
 		<section class="dashboard">
+
 			<section class="hero">
-				<div class="hero-copy"> <span class="eyebrow">Catalog management</span>
+				<div class="hero-copy">
+					<span class="eyebrow">Catalog management</span>
 					<h1>Welcome back, Admin.</h1>
-					<p> Manage the Earthly plant catalog, keep plant information accurate, and make sure users always have clear and organized care guidance. </p>
+					<p>
+						Manage the Earthly plant catalog, keep plant information accurate,
+						and make sure users always have clear and organized care guidance.
+					</p>
 				</div>
+
 				<div class="hero-side">
 					<div class="mini-panel">
 						<div class="label">Catalog overview</div>
 						<div class="value">128 plants</div>
-						<div class="sub">Current number of plant entries available to users in this demo catalog.</div>
+						<div class="sub">Current number of plant entries available.</div>
 					</div>
+
 					<div class="mini-panel">
 						<div class="label">Admin focus</div>
 						<div class="value">Accuracy first</div>
-						<div class="sub">Keep watering, light, and basic care information clear and consistent.</div>
+						<div class="sub">Keep plant info clear and consistent.</div>
 					</div>
 				</div>
 			</section>
+
 			<section class="content-grid">
 				<section class="section-card">
 					<div class="section-head">
 						<div>
 							<h2 class="section-title">Admin actions</h2>
-							<p class="section-desc"> The main tasks available to the administrator in this phase of the project. </p>
+							<p class="section-desc">
+								The main tasks available to the administrator.
+							</p>
 						</div>
 					</div>
+
 					<div class="action-grid">
+
+					
 						<article class="action-card">
 							<div class="action-icon">＋</div>
 							<h3>Add new plant</h3>
-							<p> Create a new catalog entry with the plant name, image, watering frequency, light requirements, and other basic care details. </p> <a href="add-plant.html" class="btn btn-primary">Go to Add Plant</a>
+							<p>Create a new catalog entry.</p>
+
+							<a href="add-plant.php" class="btn btn-primary">
+								Go to Add Plant
+							</a>
 						</article>
+
+						<!-- ✅ Edit Plant -->
 						<article class="action-card">
 							<div class="action-icon">✎</div>
 							<h3>Edit plant information</h3>
-							<p> Update existing plant details to keep the catalog accurate, complete, and easy for users to understand. </p> <a href="edit-plant.html" class="btn btn-primary">Go to Edit Plant Info</a>
+							<p>Update existing plant details.</p>
+
+							<a href="edit-plant.php" class="btn btn-primary">
+								Go to Edit Plant Info
+							</a>
 						</article>
+
 					</div>
 				</section>
 			</section>
-		</section>
-		<p class="page-footer">© 2026 Earthly — Group 6, IT320 Section 77800, King Saud University</p>
-	</main>
-	<script>
-	window.addEventListener('scroll', () => {
-		document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 20);
-	});
-	</script>
-</body>
 
+		</section>
+
+		<p class="page-footer">
+			© 2026 Earthly — Group 6, IT320 Section 77800, King Saud University
+		</p>
+
+	</main>
+
+	<script>
+		window.addEventListener('scroll', () => {
+			document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 20);
+		});
+	</script>
+
+</body>
 </html>
