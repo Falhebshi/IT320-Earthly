@@ -1,12 +1,12 @@
 <?php
-$host     = 'localhost';
-$dbname   = 'earthly-db';
+$host = 'localhost';
+$dbname = 'earthly-db';
 $username = 'root';
-$password = '';
+$password = 'root';
 
 try {
     $pdo = new PDO(
-        "mysql:host=$host;dbname=$dbname;charset=utf8mb4",
+        "mysql:host=$host;port=8889;dbname=$dbname;charset=utf8mb4",
         $username,
         $password,
         [
