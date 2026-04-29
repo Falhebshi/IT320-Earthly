@@ -1,22 +1,22 @@
 <?php
-include("db_config.php");
+require_once 'auth.php';
+require_once 'db.php';
 
-/* ── Get all plants ── */
-$plants = [];
-$result = mysqli_query($conn, "SELECT * FROM plant");
-while ($row = mysqli_fetch_assoc($result)) {
-    $plants[] = $row;
-}
 
-/* ── Load selected plant ── */
+$stmt = $pdo->prepare("SELECT * FROM plant");
+$stmt->execute();
+$plants = $stmt->fetchAll();
+
+
 $selectedPlant = null;
+
 if (isset($_GET['id'])) {
-    $id = intval($_GET['id']);
-    $res = mysqli_query($conn, "SELECT * FROM plant WHERE plant_id=$id");
-    $selectedPlant = mysqli_fetch_assoc($res);
+    $stmt = $pdo->prepare("SELECT * FROM plant WHERE plant_id = ?");
+    $stmt->execute([$_GET['id']]);
+    $selectedPlant = $stmt->fetch();
 }
 
-/* ── Update plant ── */
+/* Update plant */
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $id = $_POST['plant_id'];
@@ -37,55 +37,97 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $tip = $_POST['tip'];
     $fun_fact = $_POST['fun_fact'];
 
-    /* ── Image upload (optional) ── */
     if (!empty($_FILES['image']['name'])) {
-        $imageName = $_FILES['image']['name'];
+        $imageName = time() . '_' . basename($_FILES['image']['name']);
         $tmp = $_FILES['image']['tmp_name'];
         move_uploaded_file($tmp, "images/" . $imageName);
 
-        $query = "UPDATE plant SET
-            common_name='$common_name',
-            scientific_name='$scientific_name',
-            category='$category',
-            difficulty='$difficulty',
-            origin='$origin',
-            watering='$watering',
-            light='$light',
-            soil='$soil',
-            temperature='$temperature',
-            humidity='$humidity',
-            size='$size',
-            pet_safe='$pet_safe',
-            about='$about',
-            tip='$tip',
-            fun_fact='$fun_fact',
-            image='$imageName'
-            WHERE plant_id=$id";
+        $stmt = $pdo->prepare("
+            UPDATE plant SET
+                common_name = ?,
+                scientific_name = ?,
+                category = ?,
+                difficulty = ?,
+                origin = ?,
+                watering = ?,
+                light = ?,
+                soil = ?,
+                temperature = ?,
+                humidity = ?,
+                size = ?,
+                pet_safe = ?,
+                about = ?,
+                tip = ?,
+                fun_fact = ?,
+                image = ?
+            WHERE plant_id = ?
+        ");
+
+        $stmt->execute([
+            $common_name,
+            $scientific_name,
+            $category,
+            $difficulty,
+            $origin,
+            $watering,
+            $light,
+            $soil,
+            $temperature,
+            $humidity,
+            $size,
+            $pet_safe,
+            $about,
+            $tip,
+            $fun_fact,
+            $imageName,
+            $id
+        ]);
+
     } else {
-        $query = "UPDATE plant SET
-            common_name='$common_name',
-            scientific_name='$scientific_name',
-            category='$category',
-            difficulty='$difficulty',
-            origin='$origin',
-            watering='$watering',
-            light='$light',
-            soil='$soil',
-            temperature='$temperature',
-            humidity='$humidity',
-            size='$size',
-            pet_safe='$pet_safe',
-            about='$about',
-            tip='$tip',
-            fun_fact='$fun_fact'
-            WHERE plant_id=$id";
+        $stmt = $pdo->prepare("
+            UPDATE plant SET
+                common_name = ?,
+                scientific_name = ?,
+                category = ?,
+                difficulty = ?,
+                origin = ?,
+                watering = ?,
+                light = ?,
+                soil = ?,
+                temperature = ?,
+                humidity = ?,
+                size = ?,
+                pet_safe = ?,
+                about = ?,
+                tip = ?,
+                fun_fact = ?
+            WHERE plant_id = ?
+        ");
+
+        $stmt->execute([
+            $common_name,
+            $scientific_name,
+            $category,
+            $difficulty,
+            $origin,
+            $watering,
+            $light,
+            $soil,
+            $temperature,
+            $humidity,
+            $size,
+            $pet_safe,
+            $about,
+            $tip,
+            $fun_fact,
+            $id
+        ]);
     }
 
-    mysqli_query($conn, $query);
     header("Location: admin-dashboard.php");
+    exit;
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
