@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['complete_task'])) {
     try {
         $pdo->beginTransaction();
 
-        // Get task details first
+        // Get the task first and make sure it belongs to the logged-in user
         $stmt = $pdo->prepare("
             SELECT ct.task_id, ct.user_plant_id, ct.task_type, ct.status
             FROM care_task ct
@@ -24,15 +24,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['complete_task'])) {
         $task = $stmt->fetch();
 
         if ($task && $task['status'] !== 'completed') {
-            // Mark current task as completed
+            // Mark the current task as completed
             $stmt = $pdo->prepare("
                 UPDATE care_task
                 SET status = 'completed'
                 WHERE task_id = ?
-            ");
+        ");
             $stmt->execute([$task_id]);
 
-            // Create the next recurring task
+            // Create the next recurring task of the same type
             createNextCareTask(
                 $pdo,
                 (int) $task['user_plant_id'],
@@ -51,13 +51,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['complete_task'])) {
 
 $stmt = $pdo->prepare("
     SELECT up.user_plant_id, up.nickname, up.location, up.note,
-           p.common_name, p.scientific_name, p.watering, p.light, p.tip, p.image
+           p.common_name, p.scientific_name, p.watering, p.light, p.tip, p.image,
+           p.category, p.humidity, p.difficulty
     FROM user_plant up
     JOIN plant p ON up.plant_id = p.plant_id
     WHERE up.user_id = ?
 ");
 $stmt->execute([$user_id]);
 $plants = $stmt->fetchAll();
+
+// Create missing initial care tasks for plants that were added before the care-task logic existed
+foreach ($plants as $plant) {
+    $stmt = $pdo->prepare("
+        SELECT COUNT(*)
+        FROM care_task
+        WHERE user_plant_id = ?
+    ");
+    $stmt->execute([$plant['user_plant_id']]);
+    $taskCount = (int) $stmt->fetchColumn();
+
+    if ($taskCount === 0) {
+        createCareTasksForPlant($pdo, (int) $plant['user_plant_id'], $plant);
+    }
+}
 
 $stmt = $pdo->prepare("
     SELECT ct.task_id, ct.task_type, ct.status, ct.task_date,
@@ -66,16 +82,12 @@ $stmt = $pdo->prepare("
     JOIN user_plant up ON ct.user_plant_id = up.user_plant_id
     JOIN plant p ON up.plant_id = p.plant_id
     WHERE up.user_id = ?
-      AND (
-          ct.status = 'pending'
-          OR ct.task_date = ?
-      )
       AND ct.task_date <= ?
+      AND (ct.status = 'pending' OR ct.task_date = ?)
     ORDER BY ct.task_date ASC
 ");
 $stmt->execute([$user_id, $today, $today]);
 $tasks = $stmt->fetchAll();
-
 
 $stmt = $pdo->prepare("SELECT * FROM streak WHERE user_id = ?");
 $stmt->execute([$user_id]);
@@ -83,10 +95,12 @@ $streak = $stmt->fetch();
 
 $currentStreak = $streak['current_streak'] ?? 0;
 $totalPlants = count($plants);
-$totalTasks = count($tasks);
-$completedTasks = count(array_filter($tasks, fn($t) => $t['status'] === 'completed'));
-$dueTasks = $totalTasks - $completedTasks;
-$progressPercent = $totalTasks > 0 ? ($completedTasks / $totalTasks) * 100 : 0;
+
+// Dashboard stat cards
+$dueTasks = count(array_filter($tasks, function ($task) {
+    return $task['status'] === 'pending';
+}));
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -594,7 +608,7 @@ $progressPercent = $totalTasks > 0 ? ($completedTasks / $totalTasks) * 100 : 0;
         .stats-grid {
             margin-top: 1.35rem;
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(3, 1fr);
             gap: 1rem;
         }
 
@@ -757,37 +771,6 @@ $progressPercent = $totalTasks > 0 ? ($completedTasks / $totalTasks) * 100 : 0;
 
         .task-action button {
             min-width: 118px;
-        }
-
-        .progress-wrap {
-            margin-top: 1.05rem;
-            padding-top: 1rem;
-            border-top: 1px solid rgba(45, 90, 61, 0.08);
-        }
-
-        .progress-top {
-            display: flex;
-            justify-content: space-between;
-            gap: 1rem;
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            margin-bottom: 0.5rem;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 10px;
-            background: #e7ece5;
-            border-radius: 999px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            width: 25%;
-            background: linear-gradient(90deg, var(--green-mid), var(--green-deep));
-            border-radius: 999px;
-            transition: width 0.3s ease;
         }
 
         .watering-card {
@@ -1288,7 +1271,7 @@ $progressPercent = $totalTasks > 0 ? ($completedTasks / $totalTasks) * 100 : 0;
                     <p> Here’s a quick view of your plants, today’s care tasks, and your current streak. Stay consistent
                         and keep your plants thriving one small step at a time. </p>
                     <div class="hero-actions"> <a href="plant-catalog.php" class="btn btn-primary">Browse Plant
-                            Catalog</a> <a href="manage-plants.php" class="btn btn-soft">Manage My Plants</a> </div>
+                            Catalog</a> <a href="manage-plants.html" class="btn btn-soft">Manage My Plants</a> </div>
                 </div>
                 <div class="hero-side">
                     <div class="mini-panel">
@@ -1314,11 +1297,6 @@ $progressPercent = $totalTasks > 0 ? ($completedTasks / $totalTasks) * 100 : 0;
                     <div class="stat-label">Due Today</div>
                     <div class="stat-value" id="dueTodayCount"><?php echo $dueTasks; ?></div>
                     <div class="stat-sub">Care tasks that still need attention today.</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Completed Today</div>
-                    <div class="stat-value" id="completedCount"><?php echo $completedTasks; ?></div>
-                    <div class="stat-sub">Tasks you’ve already completed so far.</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-label">Current Streak</div>
@@ -1369,13 +1347,7 @@ $progressPercent = $totalTasks > 0 ? ($completedTasks / $totalTasks) * 100 : 0;
     <?php endforeach; ?>
 <?php endif; ?>
 </div>
-            
-                <div class="progress-wrap">
-                   <span id="progressText"><?php echo $completedTasks; ?> of <?php echo $totalTasks; ?> tasks completed</span>
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="progressFill" style="width: <?php echo $progressPercent; ?>%;"></div>
-                    </div>
-                </div>
+
             </div>
                 
             <section class="section-card watering-card">
@@ -1478,7 +1450,7 @@ $progressPercent = $totalTasks > 0 ? ($completedTasks / $totalTasks) * 100 : 0;
                             <h2 class="section-title">My plants</h2>
                             <p class="section-desc"> Your saved plants at a glance, with their nickname first and a
                                 simple care summary. </p>
-                        </div> <a href="manage-plants.php" class="btn btn-outline">Manage Plants</a>
+                        </div> <a href="manage-plants.html" class="btn btn-outline">Manage Plants</a>
                     </div>
                     <div class="plants-stack">
                     <?php if (empty($plants)): ?>
@@ -1575,27 +1547,11 @@ $progressPercent = $totalTasks > 0 ? ($completedTasks / $totalTasks) * 100 : 0;
             }
         }
 
-        function bindNotificationDoneButtons() {
-            const doneButtons = notificationList.querySelectorAll('.notification-done-btn');
-            doneButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    const item = button.closest('.notification-item');
-                    if (item) {
-                        item.remove();
-                        updateNotificationState();
-                    }
-                });
-            });
-        }
-
-        bindNotificationDoneButtons();
         updateNotificationState();
 
         const todayDate = document.getElementById('todayDate');
         const dueTodayCount = document.getElementById('dueTodayCount');
         const completedCount = document.getElementById('completedCount');
-        const progressText = document.getElementById('progressText');
-        const progressFill = document.getElementById('progressFill');
         const now = new Date();
         todayDate.textContent = now.toLocaleDateString('en-US', {
             weekday: 'long',
