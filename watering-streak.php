@@ -696,7 +696,7 @@ $nextMilestone = $currentStreak < 10 ? 10 : ($currentStreak < 30 ? 30 : 50);
 
                 <div class="hero-actions">
                     <a href="user-dashboard.php" class="btn btn-primary">Back to Dashboard</a>
-                    <a href="manage-plants.html" class="btn btn-soft">View My Plants</a>
+                    <a href="manage-plants.php" class="btn btn-soft">View My Plants</a>
                 </div>
             </div>
 
