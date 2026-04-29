@@ -2,12 +2,12 @@
 require_once 'auth.php';
 require_once 'db.php';
 
-/* Get all plants */
+
 $stmt = $pdo->prepare("SELECT * FROM plant");
 $stmt->execute();
 $plants = $stmt->fetchAll();
 
-/* Load selected plant */
+
 $selectedPlant = null;
 
 if (isset($_GET['id'])) {
