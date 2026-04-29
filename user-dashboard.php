@@ -1271,7 +1271,7 @@ $dueTasks = count(array_filter($tasks, function ($task) {
                     <p> Here’s a quick view of your plants, today’s care tasks, and your current streak. Stay consistent
                         and keep your plants thriving one small step at a time. </p>
                     <div class="hero-actions"> <a href="plant-catalog.php" class="btn btn-primary">Browse Plant
-                            Catalog</a> <a href="manage-plants.html" class="btn btn-soft">Manage My Plants</a> </div>
+                            Catalog</a> <a href="manage-plants.php" class="btn btn-soft">Manage My Plants</a> </div>
                 </div>
                 <div class="hero-side">
                     <div class="mini-panel">
@@ -1450,7 +1450,7 @@ $dueTasks = count(array_filter($tasks, function ($task) {
                             <h2 class="section-title">My plants</h2>
                             <p class="section-desc"> Your saved plants at a glance, with their nickname first and a
                                 simple care summary. </p>
-                        </div> <a href="manage-plants.html" class="btn btn-outline">Manage Plants</a>
+                        </div> <a href="manage-plants.php" class="btn btn-outline">Manage Plants</a>
                     </div>
                     <div class="plants-stack">
                     <?php if (empty($plants)): ?>
