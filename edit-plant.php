@@ -1,21 +1,21 @@
 <?php
 require_once 'auth.php';
-include("db_config.php");
-/* ── Get all plants ── */
-$plants = [];
-$result = mysqli_query($conn, "SELECT * FROM plant");
-while ($row = mysqli_fetch_assoc($result)) {
-    $plants[] = $row;
-}
+require_once 'db.php';
 
-/* ── Load selected plant ── */
+/* — Get all plants — */
+$stmt = $pdo->prepare("SELECT * FROM plant");
+$stmt->execute();
+$plants = $stmt->fetchAll();
+
+/* — Load selected plant — */
 $selectedPlant = null;
-if (isset($_GET['id'])) {
-    $id = intval($_GET['id']);
-    $res = mysqli_query($conn, "SELECT * FROM plant WHERE plant_id=$id");
-    $selectedPlant = mysqli_fetch_assoc($res);
-}
 
+if (isset($_GET['id'])) {
+    $stmt = $pdo->prepare("SELECT * FROM plant WHERE plant_id = ?");
+    $stmt->execute([$_GET['id']]);
+    $selectedPlant = $stmt->fetch();
+}
+?>
 /* ── Update plant ── */
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
