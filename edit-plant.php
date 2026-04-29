@@ -1,6 +1,6 @@
 <?php
+require_once 'auth.php';
 include("db_config.php");
-
 /* ── Get all plants ── */
 $plants = [];
 $result = mysqli_query($conn, "SELECT * FROM plant");
