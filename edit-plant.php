@@ -2,11 +2,9 @@
 require_once 'auth.php';
 require_once 'db.php';
 
-
 $stmt = $pdo->prepare("SELECT * FROM plant");
 $stmt->execute();
 $plants = $stmt->fetchAll();
-
 
 $selectedPlant = null;
 
@@ -16,7 +14,6 @@ if (isset($_GET['id'])) {
     $selectedPlant = $stmt->fetch();
 }
 
-/* Update plant */
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $id = $_POST['plant_id'];
@@ -39,8 +36,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (!empty($_FILES['image']['name'])) {
         $imageName = time() . '_' . basename($_FILES['image']['name']);
+        $imagePath = "images/" . $imageName;
         $tmp = $_FILES['image']['tmp_name'];
-        move_uploaded_file($tmp, "images/" . $imageName);
+
+        move_uploaded_file($tmp, $imagePath);
 
         $stmt = $pdo->prepare("
             UPDATE plant SET
@@ -79,7 +78,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $about,
             $tip,
             $fun_fact,
-            $imageName,
+            $imagePath,
             $id
         ]);
 
@@ -128,6 +127,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     exit;
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -137,13 +137,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <h2>Edit Plant</h2>
 
-<!-- ── Select Plant ── -->
 <form method="GET">
     <select name="id">
-        <option>Select plant</option>
+        <option value="">Select plant</option>
         <?php foreach($plants as $p): ?>
-            <option value="<?= $p['plant_id'] ?>">
-                <?= $p['common_name'] ?>
+            <option value="<?= htmlspecialchars($p['plant_id']) ?>">
+                <?= htmlspecialchars($p['common_name']) ?>
             </option>
         <?php endforeach; ?>
     </select>
@@ -156,28 +155,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <form method="POST" enctype="multipart/form-data">
 
-<input type="hidden" name="plant_id" value="<?= $selectedPlant['plant_id'] ?>">
+<input type="hidden" name="plant_id" value="<?= htmlspecialchars($selectedPlant['plant_id']) ?>">
 
-<input name="common_name" value="<?= $selectedPlant['common_name'] ?>" placeholder="Common Name"><br>
-<input name="scientific_name" value="<?= $selectedPlant['scientific_name'] ?>" placeholder="Scientific Name"><br>
-<input name="category" value="<?= $selectedPlant['category'] ?>"><br>
-<input name="difficulty" value="<?= $selectedPlant['difficulty'] ?>"><br>
-<input name="origin" value="<?= $selectedPlant['origin'] ?>"><br>
-<input name="watering" value="<?= $selectedPlant['watering'] ?>"><br>
-<input name="light" value="<?= $selectedPlant['light'] ?>"><br>
-<input name="soil" value="<?= $selectedPlant['soil'] ?>"><br>
-<input name="temperature" value="<?= $selectedPlant['temperature'] ?>"><br>
-<input name="humidity" value="<?= $selectedPlant['humidity'] ?>"><br>
-<input name="size" value="<?= $selectedPlant['size'] ?>"><br>
+<input name="common_name" value="<?= htmlspecialchars($selectedPlant['common_name']) ?>" placeholder="Common Name"><br>
+<input name="scientific_name" value="<?= htmlspecialchars($selectedPlant['scientific_name']) ?>" placeholder="Scientific Name"><br>
+<input name="category" value="<?= htmlspecialchars($selectedPlant['category']) ?>"><br>
+<input name="difficulty" value="<?= htmlspecialchars($selectedPlant['difficulty']) ?>"><br>
+<input name="origin" value="<?= htmlspecialchars($selectedPlant['origin']) ?>"><br>
+<input name="watering" value="<?= htmlspecialchars($selectedPlant['watering']) ?>"><br>
+<input name="light" value="<?= htmlspecialchars($selectedPlant['light']) ?>"><br>
+<input name="soil" value="<?= htmlspecialchars($selectedPlant['soil']) ?>"><br>
+<input name="temperature" value="<?= htmlspecialchars($selectedPlant['temperature']) ?>"><br>
+<input name="humidity" value="<?= htmlspecialchars($selectedPlant['humidity']) ?>"><br>
+<input name="size" value="<?= htmlspecialchars($selectedPlant['size']) ?>"><br>
 
 <select name="pet_safe">
-    <option <?= $selectedPlant['pet_safe']==1 ? 'selected':'' ?>>1</option>
-    <option <?= $selectedPlant['pet_safe']==0 ? 'selected':'' ?>>0</option>
+    <option value="1" <?= $selectedPlant['pet_safe']==1 ? 'selected':'' ?>>1</option>
+    <option value="0" <?= $selectedPlant['pet_safe']==0 ? 'selected':'' ?>>0</option>
 </select><br>
 
-<textarea name="about"><?= $selectedPlant['about'] ?></textarea><br>
-<textarea name="tip"><?= $selectedPlant['tip'] ?></textarea><br>
-<textarea name="fun_fact"><?= $selectedPlant['fun_fact'] ?></textarea><br>
+<textarea name="about"><?= htmlspecialchars($selectedPlant['about']) ?></textarea><br>
+<textarea name="tip"><?= htmlspecialchars($selectedPlant['tip']) ?></textarea><br>
+<textarea name="fun_fact"><?= htmlspecialchars($selectedPlant['fun_fact']) ?></textarea><br>
 
 <input type="file" name="image"><br>
 
