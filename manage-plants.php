@@ -1,5 +1,4 @@
 <?php
-session_start(); 
 require_once 'auth.php';
 require_once 'db.php';
 
@@ -9,6 +8,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 $user_id = $_SESSION['user_id'];
+$myPlantsFromDB = [];
 
 try {
     $stmt = $pdo->prepare("
@@ -22,7 +22,25 @@ try {
     $stmt->execute([$user_id]);
     $myPlantsFromDB = $stmt->fetchAll();
 } catch (PDOException $e) {
-    echo "Connection Error: " . $e->getMessage();
+    die("Connection Error: " . $e->getMessage());
+}
+
+function h($value) {
+    return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
+}
+
+function plantImagePath($image) {
+    $image = trim((string) $image);
+
+    if ($image === '') {
+        return 'images/default-plant.png';
+    }
+
+    if (str_starts_with($image, 'images/')) {
+        return $image;
+    }
+
+    return 'images/' . $image;
 }
 ?>
 <!DOCTYPE html>
@@ -343,9 +361,9 @@ try {
     <nav id="navbar">
         <a href="index.html" class="nav-logo">Earthly</a>
         <div class="nav-right">
-            <a href="user-dashboard.html" class="nav-link active">Dashboard</a>
-            <a href="plant-catalog.html" class="nav-link">Catalog</a>
-            <a href="login.html" class="btn btn-outline">Log out</a>
+            <a href="user-dashboard.php" class="nav-link active">Dashboard</a>
+            <a href="plant-catalog.php" class="nav-link">Catalog</a>
+            <a href="logout.php" class="btn btn-outline">Log out</a>
         </div>
     </nav>
 
@@ -406,7 +424,7 @@ try {
 
         <section class="dashboard">
             <div class="breadcrumb">
-                <a href="user-dashboard.html">Dashboard</a>
+                <a href="user-dashboard.php">Dashboard</a>
                 <span class="sep">›</span>
                 <span id="breadcrumbName">Manage Plants</span>
             </div>
@@ -419,11 +437,78 @@ try {
                         <h2 class="section-title">Your plants</h2>
                         <p class="section-desc">Click "Edit" on any plant to update its nickname, location, or personal notes.</p>
                     </div>
-                    <a href="plant-catalog.html" class="btn btn-outline">Add a Plant</a>
+                    <a href="plant-catalog.php" class="btn btn-outline">Add a Plant</a>
                 </div>
-
                 <div class="plants-stack" id="plantsContainer">
-                    <!-- Cards rendered by JS -->
+                    <?php if (empty($myPlantsFromDB)): ?>
+                        <div class="plant-note-box">
+                            You do not have any plants in your collection yet. Add one from the catalog.
+                        </div>
+                    <?php else: ?>
+                        <?php foreach ($myPlantsFromDB as $plant): ?>
+                            <?php
+                                $nickname = $plant['nickname'] !== '' ? $plant['nickname'] : $plant['commonName'];
+                                $location = $plant['location'] !== '' ? $plant['location'] : 'No location set';
+                                $note = $plant['note'] !== '' ? $plant['note'] : 'No personal note added yet.';
+                                $imagePath = plantImagePath($plant['image']);
+                            ?>
+
+                            <article class="plant-manage-card"
+                                     data-id="<?= h($plant['id']) ?>"
+                                     data-nickname="<?= h($nickname) ?>"
+                                     data-location="<?= h($location) ?>"
+                                     data-note="<?= h($note) ?>">
+                                <div class="plant-img-side">
+                                    <img src="<?= h($imagePath) ?>" alt="<?= h($plant['commonName']) ?>">
+                                    <span class="plant-location-badge" data-loc-badge><?= h($location) ?></span>
+                                </div>
+
+                                <div class="plant-details-side">
+                                    <div class="plant-header">
+                                        <div class="plant-header-info">
+                                            <h3 data-display-nickname><?= h($nickname) ?></h3>
+                                            <p><?= h($plant['commonName']) ?> · <?= h($plant['scientificName']) ?></p>
+                                        </div>
+                                        <div class="plant-header-actions">
+                                            <button type="button" class="btn btn-soft btn-sm edit-btn">Edit</button>
+                                            <button type="button" class="btn btn-danger-soft btn-sm remove-btn">Remove</button>
+                                        </div>
+                                    </div>
+
+                                    <div class="read-view" data-read>
+                                        <div class="plant-info-grid">
+                                            <p><strong>Location:</strong> <span data-display-location><?= h($location) ?></span></p>
+                                            <p><strong>Watering:</strong> <?= h($plant['watering']) ?></p>
+                                            <p><strong>Light:</strong> <?= h($plant['light']) ?></p>
+                                            <p><strong>Note:</strong> <span data-display-note><?= h($note) ?></span></p>
+                                        </div>
+                                        <div class="plant-note-box">
+                                            <strong>Tip:</strong> <?= h($plant['tip']) ?>
+                                        </div>
+                                    </div>
+
+                                    <div class="edit-form" data-edit>
+                                        <div class="form-group">
+                                            <label>Nickname</label>
+                                            <input type="text" data-edit-nickname value="<?= h($nickname) ?>" placeholder="Give your plant a name">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Location</label>
+                                            <input type="text" data-edit-location value="<?= h($location) ?>" placeholder="e.g. Living room, Bedroom shelf">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Personal Note</label>
+                                            <textarea data-edit-note placeholder="Write anything you want to remember about this plant."><?= h($note) ?></textarea>
+                                        </div>
+                                        <div class="edit-actions">
+                                            <button type="button" class="btn btn-primary btn-sm save-btn">Save Changes</button>
+                                            <button type="button" class="btn btn-soft btn-sm cancel-edit-btn">Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </article>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                 </div>
             </div>
         </section>
@@ -436,121 +521,11 @@ try {
         window.addEventListener('scroll', () => {
             document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 20);
         });
-
-        /* ── Plant Data (simulates user's saved collection) ── */
-        let myPlants = [
-            {
-                id: 1,
-                nickname: "Olive",
-                commonName: "Snake Plant",
-                scientificName: "Dracaena trifasciata",
-                location: "Living room",
-                watering: "Every 14–21 days",
-                light: "Bright indirect to low light",
-                petSafe: "Not pet safe",
-                note: "Doing well near the TV stand with low-maintenance care.",
-                tip: "Let the soil dry well before watering again. Snake plants usually do better with less water than too much.",
-                image: "images/snake-plant.png"
-            },
-            {
-                id: 2,
-                nickname: "Ivy",
-                commonName: "Pothos",
-                scientificName: "Epipremnum aureum",
-                location: "Bedroom",
-                watering: "Every 7–10 days",
-                light: "Bright indirect light",
-                petSafe: "Not pet safe",
-                note: "Needs a quick check today because the soil dries faster in this room.",
-                tip: "If the leaves look limp, check the soil first. Pothos usually like slightly dry soil between waterings.",
-                image: "images/pothos.png"
-            },
-            {
-                id: 3,
-                nickname: "Luna",
-                commonName: "Monstera",
-                scientificName: "Monstera deliciosa",
-                location: "Window corner",
-                watering: "Every 7–10 days",
-                light: "Bright indirect light",
-                petSafe: "Not pet safe",
-                note: "Growing steadily and likes being rotated for balanced light.",
-                tip: "Rotate your monstera every week so each side gets balanced light and the plant grows more evenly.",
-                image: "images/Monstera.png"
-            }
-        ];
-
+        /* ── Card Actions ── */
         const plantsContainer = document.getElementById('plantsContainer');
 
-        /* ── Render All Cards ── */
-        function renderPlants() {
-            plantsContainer.innerHTML = '';
-            myPlants.forEach(plant => {
-                plantsContainer.insertAdjacentHTML('beforeend', buildCard(plant));
-            });
-            attachCardListeners();
-        }
-
-        function buildCard(p) {
-            return `
-            <article class="plant-manage-card" data-id="${p.id}">
-                <div class="plant-img-side">
-                    <img src="${p.image}" alt="${p.commonName}">
-                    <span class="plant-location-badge" data-loc-badge>${p.location}</span>
-                </div>
-                <div class="plant-details-side">
-                    <div class="plant-header">
-                        <div class="plant-header-info">
-                            <h3 data-display-nickname>${p.nickname}</h3>
-                            <p>${p.commonName} · ${p.scientificName}</p>
-                        </div>
-                        <div class="plant-header-actions">
-                            <button class="btn btn-soft btn-sm edit-btn">Edit</button>
-                            <button class="btn btn-danger-soft btn-sm remove-btn">Remove</button>
-                        </div>
-                    </div>
-
-                    <!-- Read View -->
-                    <div class="read-view" data-read>
-                        <div class="plant-info-grid">
-                            <p><strong>Location:</strong> <span data-display-location>${p.location}</span></p>
-                            <p><strong>Watering:</strong> ${p.watering}</p>
-                            <p><strong>Light:</strong> ${p.light}</p>
-                            <p><strong>Pet Safety:</strong> ${p.petSafe}</p>
-                            <p><strong>Note:</strong> <span data-display-note>${p.note}</span></p>
-                        </div>
-                        <div class="plant-note-box">
-                            <strong>Tip:</strong> ${p.tip}
-                        </div>
-                    </div>
-
-                    <!-- Edit View -->
-                    <div class="edit-form" data-edit>
-                        <div class="form-group">
-                            <label>Nickname</label>
-                            <input type="text" data-edit-nickname value="${p.nickname}" placeholder="Give your plant a name">
-                        </div>
-                        <div class="form-group">
-                            <label>Location</label>
-                            <input type="text" data-edit-location value="${p.location}" placeholder="e.g. Living room, Bedroom shelf">
-                        </div>
-                        <div class="form-group">
-                            <label>Personal Note</label>
-                            <textarea data-edit-note placeholder="Write anything you want to remember about this plant.">${p.note}</textarea>
-                        </div>
-                        <div class="edit-actions">
-                            <button class="btn btn-primary btn-sm save-btn">Save Changes</button>
-                            <button class="btn btn-soft btn-sm cancel-edit-btn">Cancel</button>
-                        </div>
-                    </div>
-                </div>
-            </article>`;
-        }
-
-        /* ── Attach Listeners ── */
         function attachCardListeners() {
             document.querySelectorAll('.plant-manage-card').forEach(card => {
-                const id = parseInt(card.dataset.id);
                 const readView = card.querySelector('[data-read]');
                 const editForm = card.querySelector('[data-edit]');
                 const editBtn = card.querySelector('.edit-btn');
@@ -565,71 +540,53 @@ try {
                 });
 
                 cancelBtn.addEventListener('click', () => {
-                    const plant = myPlants.find(p => p.id === id);
-                    card.querySelector('[data-edit-nickname]').value = plant.nickname;
-                    card.querySelector('[data-edit-location]').value = plant.location;
-                    card.querySelector('[data-edit-note]').value = plant.note;
+                    card.querySelector('[data-edit-nickname]').value = card.dataset.nickname;
+                    card.querySelector('[data-edit-location]').value = card.dataset.location;
+                    card.querySelector('[data-edit-note]').value = card.dataset.note;
+
                     editForm.classList.remove('visible');
                     readView.classList.remove('hidden');
                     editBtn.style.display = '';
                 });
-              saveBtn.addEventListener('click', () => {
-    //the right ID from db
-    const db_id = card.dataset.id; 
-    const newNickname = card.querySelector('[data-edit-nickname]').value.trim();
-    const newLocation = card.querySelector('[data-edit-location]').value.trim();
-    const newNote = card.querySelector('[data-edit-note]').value.trim();
 
-    if (!newNickname) {
-        card.querySelector('[data-edit-nickname]').focus();
-        return;
-    }
+                saveBtn.addEventListener('click', () => {
+                    const dbId = card.dataset.id;
+                    const newNickname = card.querySelector('[data-edit-nickname]').value.trim();
+                    const newLocation = card.querySelector('[data-edit-location]').value.trim();
+                    const newNote = card.querySelector('[data-edit-note]').value.trim();
 
-    const formData = new FormData();
-    formData.append('update', '1');
-    formData.append('id', db_id);
-    formData.append('nickname', newNickname);
-    formData.append('location', newLocation);
-    formData.append('note', newNote);
+                    if (!newNickname) {
+                        card.querySelector('[data-edit-nickname]').focus();
+                        return;
+                    }
 
-    fetch('manage_process.php', {
-        method: 'POST',
-        body: formData
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data.success) {
-            location.reload(); // reload to show the new content 
-        }
-    });
-});
+                    const formData = new FormData();
+                    formData.append('update', '1');
+                    formData.append('id', dbId);
+                    formData.append('nickname', newNickname);
+                    formData.append('location', newLocation);
+                    formData.append('note', newNote);
 
-                   <----<!-- From phase 3
-                   plant.nickname = newNickname;
-                    plant.location = newLocation;
-                    plant.note = newNote;
-
-                    card.querySelector('[data-display-nickname]').textContent = newNickname;
-                    card.querySelector('[data-display-location]').textContent = newLocation;
-                    card.querySelector('[data-display-note]').textContent = newNote;
-                    card.querySelector('[data-loc-badge]').textContent = newLocation;
-
-                    editForm.classList.remove('visible');
-                    readView.classList.remove('hidden');
-                    editBtn.style.display = '';
-
-                    showSaveModal(newNickname);
-                }); -->
+                    fetch('manage_process.php', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            location.reload();
+                        }
+                    })
+                    .catch(() => alert('Could not save changes. Please try again.'));
+                });
 
                 removeBtn.addEventListener('click', () => {
-                    pendingDeleteId = id;
-                    const plant = myPlants.find(p => p.id === id);
-                    document.getElementById('deleteModalName').textContent = plant.nickname;
+                    pendingDeleteId = card.dataset.id;
+                    document.getElementById('deleteModalName').textContent = card.dataset.nickname;
                     document.getElementById('deleteModal').classList.add('visible');
                 });
             });
         }
-
         /* ── Save Modal ── */
         const saveModal = document.getElementById('saveModal');
         const saveModalName = document.getElementById('saveModalName');
@@ -681,7 +638,7 @@ try {
         });
 
         /* ── Init ── */
-        renderPlants();
+        attachCardListeners();
     </script>
 </body>
 

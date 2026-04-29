@@ -29,7 +29,9 @@ $problems = $stmt->fetchAll();
     <title><?= htmlspecialchars($plant['common_name']) ?> — Earthly</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Source+Sans+3:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
 
     <style>
         :root {
@@ -53,7 +55,11 @@ $problems = $stmt->fetchAll();
             --shadow-lg: 0 8px 40px rgba(45, 90, 61, 0.16);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
         body {
             font-family: 'Source Sans 3', sans-serif;
@@ -62,8 +68,14 @@ $problems = $stmt->fetchAll();
             overflow-x: hidden;
         }
 
-        a { text-decoration: none; color: inherit; }
-        button { font-family: inherit; }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        button {
+            font-family: inherit;
+        }
 
         nav {
             position: fixed;
@@ -81,7 +93,9 @@ $problems = $stmt->fetchAll();
             transition: box-shadow 0.3s ease;
         }
 
-        nav.scrolled { box-shadow: var(--shadow-sm); }
+        nav.scrolled {
+            box-shadow: var(--shadow-sm);
+        }
 
         .nav-logo {
             font-family: 'Playfair Display', serif;
@@ -279,7 +293,7 @@ $problems = $stmt->fetchAll();
         .badge-not-pet {
             background: rgba(255, 255, 255, 0.9);
             color: var(--text-secondary);
-            border: 1px solid rgba(0,0,0,0.08);
+            border: 1px solid rgba(0, 0, 0, 0.08);
         }
 
         .detail-body {
@@ -573,15 +587,42 @@ $problems = $stmt->fetchAll();
         }
 
         @media (max-width: 760px) {
-            nav { padding: 1rem 4%; }
-            .page { padding: 7rem 4% 2rem; }
-            .detail-body { padding: 1.2rem; }
-            .detail-header h1 { font-size: 1.8rem; }
-            .detail-image-wrap img { height: 260px; }
-            .info-grid { grid-template-columns: 1fr; }
-            .info-row.full-width { grid-column: auto; }
-            .nav-right { gap: 0.35rem; }
-            .nav-link, .btn { padding: 0.6rem 0.85rem; }
+            nav {
+                padding: 1rem 4%;
+            }
+
+            .page {
+                padding: 7rem 4% 2rem;
+            }
+
+            .detail-body {
+                padding: 1.2rem;
+            }
+
+            .detail-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .detail-image-wrap img {
+                height: 260px;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .info-row.full-width {
+                grid-column: auto;
+            }
+
+            .nav-right {
+                gap: 0.35rem;
+            }
+
+            .nav-link,
+            .btn {
+                padding: 0.6rem 0.85rem;
+            }
         }
     </style>
 </head>
@@ -602,10 +643,11 @@ $problems = $stmt->fetchAll();
             <div class="modal-icon">✓</div>
             <h2 class="modal-title">Added to My Plants!</h2>
             <p class="modal-desc">
-                <strong id="modalPlantName"><?= htmlspecialchars($plant['common_name']) ?></strong> has been added to your personal collection.
+                <strong id="modalPlantName"><?= htmlspecialchars($plant['common_name']) ?></strong> has been added to
+                your personal collection.
             </p>
             <div class="modal-actions">
-                <a href="manage-plants.html" class="modal-btn primary">Go to My Plants</a>
+                <a href="manage-plants.php" class="modal-btn primary">Go to My Plants</a>
                 <button class="modal-btn ghost" id="modalContinue">Continue Browsing</button>
             </div>
         </div>
@@ -624,7 +666,8 @@ $problems = $stmt->fetchAll();
 
             <div class="detail-card">
                 <div class="detail-image-wrap">
-                    <img src="images/<?= htmlspecialchars($plant['image']) ?>" alt="<?= htmlspecialchars($plant['common_name']) ?>">
+                    <img src="images/<?= htmlspecialchars($plant['image']) ?>"
+                        alt="<?= htmlspecialchars($plant['common_name']) ?>">
 
                     <div class="detail-badges">
                         <span class="badge badge-category"><?= htmlspecialchars($plant['category']) ?></span>
@@ -677,7 +720,8 @@ $problems = $stmt->fetchAll();
                                 <div class="info-icon">🐾</div>
                                 <div>
                                     <div class="info-label">Pet Safety</div>
-                                    <div class="info-value"><?= $plant['pet_safe'] ? 'Safe for pets' : 'Not pet safe' ?></div>
+                                    <div class="info-value"><?= $plant['pet_safe'] ? 'Safe for pets' : 'Not pet safe' ?>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -766,7 +810,11 @@ $problems = $stmt->fetchAll();
                     </div>
 
                     <div class="detail-actions">
-                        <button class="btn btn-primary btn-lg" id="addBtn">Add to My Plants</button>
+                        <button type="button" class="btn btn-primary btn-lg" id="addBtn"
+                            data-plant-id="<?= htmlspecialchars($plant['plant_id']) ?>">
+                            Add to My Plants
+                        </button>
+
                         <a href="plant-catalog.php" class="btn btn-outline">Back to Catalog</a>
                     </div>
                 </div>
@@ -785,12 +833,39 @@ $problems = $stmt->fetchAll();
         const addedModal = document.getElementById('addedModal');
         const modalContinue = document.getElementById('modalContinue');
 
-        addBtn.addEventListener('click', () => {
-            addBtn.textContent = 'Added to My Plants';
-            addBtn.classList.remove('btn-primary');
-            addBtn.classList.add('btn-soft');
+        addBtn.addEventListener('click', async () => {
+            const plantId = addBtn.dataset.plantId;
+
             addBtn.disabled = true;
-            addedModal.classList.add('visible');
+            addBtn.textContent = 'Adding...';
+
+            try {
+                const response = await fetch('add_to_collection.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: 'plant_id=' + encodeURIComponent(plantId)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    addBtn.textContent = 'Added to My Plants';
+                    addBtn.classList.remove('btn-primary');
+                    addBtn.classList.add('btn-soft');
+
+                    addedModal.classList.add('visible');
+                } else {
+                    addBtn.disabled = false;
+                    addBtn.textContent = 'Add to My Plants';
+                    alert('Could not add plant. Please try again.');
+                }
+            } catch (error) {
+                addBtn.disabled = false;
+                addBtn.textContent = 'Add to My Plants';
+                alert('Something went wrong. Please try again.');
+            }
         });
 
         modalContinue.addEventListener('click', () => {
@@ -799,4 +874,5 @@ $problems = $stmt->fetchAll();
     </script>
 
 </body>
+
 </html>
