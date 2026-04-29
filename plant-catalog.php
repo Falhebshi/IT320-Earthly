@@ -469,9 +469,9 @@ $plants = $stmt->fetchAll();
 
                 <div class="category-pills">
                     <a class="pill <?= $category === 'all' ? 'active' : '' ?>" href="plant-catalog.php?category=all">All Plants</a>
-                    <a class="pill <?= $category === 'Indoor plant' ? 'active' : '' ?>" href="plant-catalog.php?category=Indoor plant">Indoor</a>
-                    <a class="pill <?= $category === 'Tropical plant' ? 'active' : '' ?>" href="plant-catalog.php?category=Tropical plant">Tropical</a>
-                    <a class="pill <?= $category === 'Trailing plant' ? 'active' : '' ?>" href="plant-catalog.php?category=Trailing plant">Trailing</a>
+                    <a class="pill <?= $category === 'Indoor plant' ? 'active' : '' ?>" href="plant-catalog.php?category=Indoor">Indoor</a>
+                    <a class="pill <?= $category === 'Tropical plant' ? 'active' : '' ?>" href="plant-catalog.php?category=Tropical">Tropical</a>
+                    <a class="pill <?= $category === 'Trailing plant' ? 'active' : '' ?>" href="plant-catalog.php?category=Trailing">Trailing</a>
                     <a class="pill <?= $category === 'Succulent' ? 'active' : '' ?>" href="plant-catalog.php?category=Succulent">Succulent</a>
                     <a class="pill <?= $category === 'Low-maintenance plant' ? 'active' : '' ?>" href="plant-catalog.php?category=Low-maintenance plant">Low-maintenance</a>
                 </div>
@@ -486,7 +486,7 @@ $plants = $stmt->fetchAll();
                     <?php foreach ($plants as $plant): ?>
                         <a href="plant-details.php?id=<?= $plant['plant_id'] ?>" class="plant-card">
                             <div class="card-image-wrap">
-                                <img src="<?= htmlspecialchars($plant['image']) ?>" alt="<?= htmlspecialchars($plant['common_name']) ?>">
+                                <img src="images/<?= htmlspecialchars($plant['image']) ?>" alt="<?= htmlspecialchars($plant['common_name']) ?>">
                                 <div class="card-badges">
                                     <span class="badge badge-category"><?= htmlspecialchars($plant['category']) ?></span>
                                     <span class="badge badge-difficulty"><?= htmlspecialchars($plant['difficulty']) ?></span>

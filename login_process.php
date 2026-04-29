@@ -41,7 +41,7 @@ if ($admin && password_verify($password, $admin['password'])) {
     $_SESSION['email']    = $admin['email'];
     $_SESSION['role']     = 'admin';
 
-    header('Location: admin-dashboard.html');
+    header('Location: admin-dashboard.php');
     exit;
 }
 

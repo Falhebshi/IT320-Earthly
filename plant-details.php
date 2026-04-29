@@ -605,7 +605,7 @@ $problems = $stmt->fetchAll();
                 <strong id="modalPlantName"><?= htmlspecialchars($plant['common_name']) ?></strong> has been added to your personal collection.
             </p>
             <div class="modal-actions">
-                <a href="manage-plants.php" class="modal-btn primary">Go to My Plants</a>
+                <a href="manage-plants.html" class="modal-btn primary">Go to My Plants</a>
                 <button class="modal-btn ghost" id="modalContinue">Continue Browsing</button>
             </div>
         </div>
@@ -624,7 +624,7 @@ $problems = $stmt->fetchAll();
 
             <div class="detail-card">
                 <div class="detail-image-wrap">
-                    <img src="<?= htmlspecialchars($plant['image']) ?>" alt="<?= htmlspecialchars($plant['common_name']) ?>">
+                    <img src="images/<?= htmlspecialchars($plant['image']) ?>" alt="<?= htmlspecialchars($plant['common_name']) ?>">
 
                     <div class="detail-badges">
                         <span class="badge badge-category"><?= htmlspecialchars($plant['category']) ?></span>

@@ -1239,7 +1239,7 @@ $progressPercent = $totalTasks > 0 ? ($completedTasks / $totalTasks) * 100 : 0;
             </div>
 
 <a href="user-dashboard.php" class="nav-link active">Dashboard</a>
-            <a href="plant-catalog.html" class="nav-link">Catalog</a>
+            <a href="plant-catalog.php" class="nav-link">Catalog</a>
             <a href="logout.php">Logout</a>   
              </div>
     </nav>
@@ -1252,7 +1252,7 @@ $progressPercent = $totalTasks > 0 ? ($completedTasks / $totalTasks) * 100 : 0;
                    <h1>Good afternoon, <?php echo htmlspecialchars($first_name); ?>.</h1>
                     <p> Here’s a quick view of your plants, today’s care tasks, and your current streak. Stay consistent
                         and keep your plants thriving one small step at a time. </p>
-                    <div class="hero-actions"> <a href="plant-catalog.html" class="btn btn-primary">Browse Plant
+                    <div class="hero-actions"> <a href="plant-catalog.php" class="btn btn-primary">Browse Plant
                             Catalog</a> <a href="manage-plants.html" class="btn btn-soft">Manage My Plants</a> </div>
                 </div>
                 <div class="hero-side">
