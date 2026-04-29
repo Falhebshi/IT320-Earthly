@@ -1,6 +1,7 @@
 <?php
 require_once 'auth.php';
 require_once 'db.php';
+require_once 'care_task_logic.php';
 
 $user_id = $_SESSION['user_id'];
 $first_name = $_SESSION['first_name'] ?? 'User';
@@ -9,13 +10,40 @@ $today = date('Y-m-d');
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['complete_task'])) {
     $task_id = $_POST['task_id'];
 
-    $stmt = $pdo->prepare("
-        UPDATE care_task ct
-        JOIN user_plant up ON ct.user_plant_id = up.user_plant_id
-        SET ct.status = 'completed'
-        WHERE ct.task_id = ? AND up.user_id = ?
-    ");
-    $stmt->execute([$task_id, $user_id]);
+    try {
+        $pdo->beginTransaction();
+
+        // Get task details first
+        $stmt = $pdo->prepare("
+            SELECT ct.task_id, ct.user_plant_id, ct.task_type, ct.status
+            FROM care_task ct
+            JOIN user_plant up ON ct.user_plant_id = up.user_plant_id
+            WHERE ct.task_id = ? AND up.user_id = ?
+        ");
+        $stmt->execute([$task_id, $user_id]);
+        $task = $stmt->fetch();
+
+        if ($task && $task['status'] !== 'completed') {
+            // Mark current task as completed
+            $stmt = $pdo->prepare("
+                UPDATE care_task
+                SET status = 'completed'
+                WHERE task_id = ?
+            ");
+            $stmt->execute([$task_id]);
+
+            // Create the next recurring task
+            createNextCareTask(
+                $pdo,
+                (int) $task['user_plant_id'],
+                $task['task_type']
+            );
+        }
+
+        $pdo->commit();
+    } catch (Exception $e) {
+        $pdo->rollBack();
+    }
 
     header("Location: user-dashboard.php");
     exit;
@@ -37,10 +65,17 @@ $stmt = $pdo->prepare("
     FROM care_task ct
     JOIN user_plant up ON ct.user_plant_id = up.user_plant_id
     JOIN plant p ON up.plant_id = p.plant_id
-    WHERE up.user_id = ? AND ct.task_date = ?
+    WHERE up.user_id = ?
+      AND (
+          ct.status = 'pending'
+          OR ct.task_date = ?
+      )
+      AND ct.task_date <= ?
+    ORDER BY ct.task_date ASC
 ");
-$stmt->execute([$user_id, $today]);
+$stmt->execute([$user_id, $today, $today]);
 $tasks = $stmt->fetchAll();
+
 
 $stmt = $pdo->prepare("SELECT * FROM streak WHERE user_id = ?");
 $stmt->execute([$user_id]);
