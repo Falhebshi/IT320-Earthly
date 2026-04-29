@@ -1,6 +1,9 @@
 <?php
-require_once 'auth.php';
+require_once 'admin_auth.php';
 require_once 'db.php';
+
+$admin_id = $_SESSION['admin_id'];
+
 $error = '';
 $success = false;
 $addedPlantName = '';
@@ -15,15 +18,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $light = trim($_POST['light'] ?? '');
     $soil = trim($_POST['soilType'] ?? '');
     $temperature = trim($_POST['temperature'] ?? '');
+    $humidity = trim($_POST['humidity'] ?? '');
+    $size = trim($_POST['size'] ?? '');
+    $about = trim($_POST['about'] ?? '');
     $petSafe = $_POST['petSafe'] ?? '';
     $commonProblems = trim($_POST['commonProblems'] ?? '');
+    $problemDescriptions = trim($_POST['problemDescriptions'] ?? '');
     $tip = trim($_POST['careTip'] ?? '');
     $funFact = trim($_POST['funFact'] ?? '');
 
     if ($commonName === '' || $scientificName === '' || $category === '' || $watering === '' || $light === '') {
         $error = 'Please fill in all required plant details before submitting.';
     } else {
-        $imagePath = 'images/default-plant.png';
+        $imagePath = 'default-plant.png';
 
         if (!empty($_FILES['plantImage']['name'])) {
             $uploadDir = 'images/';
@@ -31,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $targetPath = $uploadDir . $fileName;
 
             if (move_uploaded_file($_FILES['plantImage']['tmp_name'], $targetPath)) {
-                $imagePath = $targetPath;
+                $imagePath = $fileName;
             }
         }
 
@@ -39,11 +46,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $stmt = $pdo->prepare("
             INSERT INTO plant 
-            (common_name, scientific_name, category, difficulty, origin, watering, light, soil, temperature, humidity, size, pet_safe, about, tip, fun_fact, image)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        ");
+            (admin_id, common_name, scientific_name, category, difficulty, origin, watering, light, soil, temperature, humidity, size, pet_safe, about, tip, fun_fact, image)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        "); 
 
         $stmt->execute([
+            $admin_id,
             $commonName,
             $scientificName,
             $category,
@@ -53,10 +61,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $light,
             $soil,
             $temperature,
-            '',
-            '',
+            $humidity,
+            $size,
             $petSafeValue,
-            '',
+            $about,
             $tip,
             $funFact,
             $imagePath
@@ -65,17 +73,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $plantId = $pdo->lastInsertId();
 
         if ($commonProblems !== '') {
-            $problems = explode(',', $commonProblems);
+            $problems = array_map('trim', explode(',', $commonProblems));
+            $descriptions = preg_split('/\r\n|\r|\n/', $problemDescriptions);
 
-            foreach ($problems as $problem) {
-                $problemName = trim($problem);
-
+            foreach ($problems as $index => $problemName) {
                 if ($problemName !== '') {
+                    $problemDesc = trim($descriptions[$index] ?? '');
+
                     $stmt = $pdo->prepare("
                         INSERT INTO plant_problem (plant_id, problem_name, problem_desc)
                         VALUES (?, ?, ?)
                     ");
-                    $stmt->execute([$plantId, $problemName, '']);
+                    $stmt->execute([$plantId, $problemName, $problemDesc]);
                 }
             }
         }
@@ -120,7 +129,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             --shadow-lg: 0 8px 40px rgba(45, 90, 61, 0.16);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
         body {
             font-family: 'Source Sans 3', sans-serif;
@@ -129,8 +142,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             overflow-x: hidden;
         }
 
-        a { text-decoration: none; color: inherit; }
-        button, input, select, textarea { font-family: inherit; }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        button,
+        input,
+        select,
+        textarea {
+            font-family: inherit;
+        }
 
         nav {
             position: fixed;
@@ -147,7 +169,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             transition: box-shadow 0.3s ease;
         }
 
-        nav.scrolled { box-shadow: var(--shadow-sm); }
+        nav.scrolled {
+            box-shadow: var(--shadow-sm);
+        }
 
         .nav-logo {
             font-family: 'Playfair Display', serif;
@@ -299,7 +323,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             padding: 1.4rem;
         }
 
-        .section-head { margin-bottom: 1.2rem; }
+        .section-head {
+            margin-bottom: 1.2rem;
+        }
 
         .section-title {
             font-family: 'Playfair Display', serif;
@@ -352,7 +378,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             color: var(--text-primary);
         }
 
-        input, select, textarea {
+        input,
+        select,
+        textarea {
             width: 100%;
             padding: 0.95rem 1rem;
             border-radius: 10px;
@@ -369,7 +397,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             resize: vertical;
         }
 
-        input:focus, select:focus, textarea:focus {
+        input:focus,
+        select:focus,
+        textarea:focus {
             border-color: var(--green-mid);
             box-shadow: 0 0 0 4px rgba(74, 124, 92, 0.12);
             background: var(--white);
@@ -389,7 +419,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             margin-top: 0.2rem;
         }
 
-        .preview-card { display: grid; gap: 1rem; }
+        .preview-card {
+            display: grid;
+            gap: 1rem;
+        }
 
         .preview-plant {
             border-radius: 20px;
@@ -421,7 +454,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             font-weight: 300;
         }
 
-        .preview-body { padding: 1rem; }
+        .preview-body {
+            padding: 1rem;
+        }
 
         .preview-name {
             font-family: 'Playfair Display', serif;
@@ -475,7 +510,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             justify-content: center;
         }
 
-        .modal-overlay.visible { display: flex; }
+        .modal-overlay.visible {
+            display: flex;
+        }
 
         .modal-box {
             background: var(--white);
@@ -550,13 +587,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         @media (max-width: 760px) {
-            nav { padding: 1rem 4%; }
-            .page { padding: 7rem 4% 2rem; }
-            h1 { font-size: 2rem; }
-            .content-grid { grid-template-columns: 1fr; }
-            .field-row { grid-template-columns: 1fr; }
-            .nav-right { gap: 0.35rem; }
-            .nav-link, .btn { padding: 0.6rem 0.85rem; }
+            nav {
+                padding: 1rem 4%;
+            }
+
+            .page {
+                padding: 7rem 4% 2rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .field-row {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-right {
+                gap: 0.35rem;
+            }
+
+            .nav-link,
+            .btn {
+                padding: 0.6rem 0.85rem;
+            }
         }
     </style>
 </head>
@@ -620,7 +678,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                             <div class="form-group">
                                 <label for="scientificName">Scientific Name</label>
-                                <input type="text" id="scientificName" name="scientificName" placeholder="e.g. Dracaena trifasciata">
+                                <input type="text" id="scientificName" name="scientificName"
+                                    placeholder="e.g. Dracaena trifasciata">
                             </div>
                         </div>
 
@@ -629,11 +688,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <label for="category">Category</label>
                                 <select id="category" name="category">
                                     <option value="">Select a category</option>
-                                    <option>Indoor plant</option>
-                                    <option>Tropical plant</option>
-                                    <option>Trailing plant</option>
+                                    <option>Indoor</option>
+                                    <option>Tropical</option>
+                                    <option>Trailing</option>
                                     <option>Succulent</option>
-                                    <option>Low-maintenance plant</option>
+                                    <option>Low-maintenance</option>
                                 </select>
                             </div>
 
@@ -675,13 +734,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <div class="field-row">
                             <div class="form-group">
                                 <label for="soilType">Soil Type</label>
-                                <input type="text" id="soilType" name="soilType" placeholder="e.g. Well-draining potting mix">
+                                <input type="text" id="soilType" name="soilType"
+                                    placeholder="e.g. Well-draining potting mix">
                             </div>
 
                             <div class="form-group">
                                 <label for="temperature">Temperature</label>
                                 <input type="text" id="temperature" name="temperature" placeholder="e.g. 18–27°C">
                             </div>
+                        </div>
+
+                        <div class="field-row">
+                            <div class="form-group">
+                                <label for="humidity">Humidity</label>
+                                <input type="text" id="humidity" name="humidity" placeholder="e.g. Medium to high">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="size">Size</label>
+                                <input type="text" id="size" name="size" placeholder="e.g. Small to Medium">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="about">About</label>
+                            <textarea id="about" name="about"
+                                placeholder="Write a short description about this plant."></textarea>
                         </div>
 
                         <div class="form-group">
@@ -696,17 +774,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                         <div class="form-group">
                             <label for="commonProblems">Common Problems</label>
-                            <textarea id="commonProblems" name="commonProblems" placeholder="e.g. Yellow leaves, root rot, brown tips"></textarea>
+                            <textarea id="commonProblems" name="commonProblems"
+                                placeholder="e.g. Yellow leaves, root rot, brown tips"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="problemDescriptions">Problem Descriptions</label>
+                            <textarea id="problemDescriptions" name="problemDescriptions"
+                                placeholder="Write one description per line, in the same order as the common problems."></textarea>
                         </div>
 
                         <div class="form-group">
                             <label for="careTip">Short Care Tip</label>
-                            <textarea id="careTip" name="careTip" placeholder="Write a short, simple tip for beginner users."></textarea>
+                            <textarea id="careTip" name="careTip"
+                                placeholder="Write a short, simple tip for beginner users."></textarea>
                         </div>
 
                         <div class="form-group">
                             <label for="funFact">Fun Fact</label>
-                            <textarea id="funFact" name="funFact" placeholder="e.g. Snake Plants convert CO₂ to oxygen at night."></textarea>
+                            <textarea id="funFact" name="funFact"
+                                placeholder="e.g. Snake Plants convert CO₂ to oxygen at night."></textarea>
                         </div>
 
                         <p class="form-note">
@@ -747,9 +834,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     <span><strong>Light:</strong> <span id="previewLight">—</span></span>
                                     <span><strong>Soil Type:</strong> <span id="previewSoilType">—</span></span>
                                     <span><strong>Temperature:</strong> <span id="previewTemperature">—</span></span>
+                                    <span><strong>Humidity:</strong> <span id="previewHumidity">—</span></span>
+                                    <span><strong>Size:</strong> <span id="previewSize">—</span></span>
+                                    <span><strong>About:</strong> <span id="previewAbout">—</span></span>
                                     <span><strong>Pet Safety:</strong> <span id="previewPetSafe">—</span></span>
-                                    <span><strong>Common Problems:</strong> <span id="previewCommonProblems">—</span></span>
-                                    <span><strong>Tip:</strong> <span id="previewTip">A short care tip will appear here.</span></span>
+                                    <span><strong>Common Problems:</strong> <span
+                                            id="previewCommonProblems">—</span></span>
+                                    <span><strong>Problem Descriptions:</strong> <span
+                                            id="previewProblemDescriptions">—</span></span>
+                                    <span><strong>Tip:</strong> <span id="previewTip">A short care tip will appear
+                                            here.</span></span>
                                     <span><strong>Fun Fact:</strong> <span id="previewFunFact">—</span></span>
                                 </div>
                             </div>
@@ -776,9 +870,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         const light = document.getElementById('light');
         const soilType = document.getElementById('soilType');
         const temperature = document.getElementById('temperature');
+        const humidity = document.getElementById('humidity');
+        const size = document.getElementById('size');
+        const about = document.getElementById('about');
         const petSafe = document.getElementById('petSafe');
         const plantImage = document.getElementById('plantImage');
         const commonProblems = document.getElementById('commonProblems');
+        const problemDescriptions = document.getElementById('problemDescriptions');
         const careTip = document.getElementById('careTip');
         const funFact = document.getElementById('funFact');
 
@@ -791,8 +889,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         const previewLight = document.getElementById('previewLight');
         const previewSoilType = document.getElementById('previewSoilType');
         const previewTemperature = document.getElementById('previewTemperature');
+        const previewHumidity = document.getElementById('previewHumidity');
+        const previewSize = document.getElementById('previewSize');
+        const previewAbout = document.getElementById('previewAbout');
         const previewPetSafe = document.getElementById('previewPetSafe');
         const previewCommonProblems = document.getElementById('previewCommonProblems');
+        const previewProblemDescriptions = document.getElementById('previewProblemDescriptions');
         const previewTip = document.getElementById('previewTip');
         const previewFunFact = document.getElementById('previewFunFact');
         const previewImage = document.getElementById('previewImage');
@@ -808,8 +910,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             previewLight.textContent = light.value.trim() || '—';
             previewSoilType.textContent = soilType.value.trim() || '—';
             previewTemperature.textContent = temperature.value.trim() || '—';
+            previewHumidity.textContent = humidity.value.trim() || '—';
+            previewSize.textContent = size.value.trim() || '—';
+            previewAbout.textContent = about.value.trim() || '—';
             previewPetSafe.textContent = petSafe.value || '—';
             previewCommonProblems.textContent = commonProblems.value.trim() || '—';
+            previewProblemDescriptions.textContent = problemDescriptions.value.trim() || '—';
             previewTip.textContent = careTip.value.trim() || '—';
             previewFunFact.textContent = funFact.value.trim() || '—';
 
@@ -840,8 +946,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             light,
             soilType,
             temperature,
+            humidity,
+            size,
+            about,
             petSafe,
             commonProblems,
+            problemDescriptions,
             careTip,
             funFact
         ].forEach(field => field.addEventListener('input', updatePreview));
@@ -874,4 +984,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </script>
 
 </body>
+
 </html>

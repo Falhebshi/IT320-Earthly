@@ -1,6 +1,8 @@
 <?php
-require_once 'auth.php';
+require_once 'admin_auth.php';
 require_once 'db.php';
+
+$plantCount = $pdo->query("SELECT COUNT(*) FROM plant")->fetchColumn();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -414,7 +416,7 @@ require_once 'db.php';
 
 	
 	<nav id="navbar">
-		<a href="index.php" class="nav-logo">Earthly</a>
+		<a href="index.html" class="nav-logo">Earthly</a>
 
 		<div class="nav-right">
 			<a href="admin-dashboard.php" class="nav-link active">Admin Dashboard</a>
@@ -441,7 +443,7 @@ require_once 'db.php';
 				<div class="hero-side">
 					<div class="mini-panel">
 						<div class="label">Catalog overview</div>
-						<div class="value">128 plants</div>
+						<div class="value"><?php echo $plantCount; ?> plants</div>
 						<div class="sub">Current number of plant entries available.</div>
 					</div>
 

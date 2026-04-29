@@ -469,11 +469,11 @@ $plants = $stmt->fetchAll();
 
                 <div class="category-pills">
                     <a class="pill <?= $category === 'all' ? 'active' : '' ?>" href="plant-catalog.php?category=all">All Plants</a>
-                    <a class="pill <?= $category === 'Indoor plant' ? 'active' : '' ?>" href="plant-catalog.php?category=Indoor">Indoor</a>
-                    <a class="pill <?= $category === 'Tropical plant' ? 'active' : '' ?>" href="plant-catalog.php?category=Tropical">Tropical</a>
-                    <a class="pill <?= $category === 'Trailing plant' ? 'active' : '' ?>" href="plant-catalog.php?category=Trailing">Trailing</a>
+                    <a class="pill <?= $category === 'Indoor' ? 'active' : '' ?>" href="plant-catalog.php?category=Indoor">Indoor</a>
+                    <a class="pill <?= $category === 'Tropical' ? 'active' : '' ?>" href="plant-catalog.php?category=Tropical">Tropical</a>
+                    <a class="pill <?= $category === 'Trailing' ? 'active' : '' ?>" href="plant-catalog.php?category=Trailing">Trailing</a>
                     <a class="pill <?= $category === 'Succulent' ? 'active' : '' ?>" href="plant-catalog.php?category=Succulent">Succulent</a>
-                    <a class="pill <?= $category === 'Low-maintenance plant' ? 'active' : '' ?>" href="plant-catalog.php?category=Low-maintenance plant">Low-maintenance</a>
+                    <a class="pill <?= $category === 'Low-maintenance' ? 'active' : '' ?>" href="plant-catalog.php?category=Low-maintenance">Low-maintenance</a>
                 </div>
 
                 <p class="results-info">
