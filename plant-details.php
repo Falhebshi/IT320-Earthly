@@ -1,5 +1,6 @@
 <?php
 require_once 'db.php';
+require_once 'auth.php';
 
 $plant_id = $_GET['id'] ?? null;
 

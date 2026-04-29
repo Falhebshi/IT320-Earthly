@@ -1,5 +1,6 @@
 <?php
 require_once 'db.php';
+require_once 'auth.php';
 
 $search = $_GET['search'] ?? '';
 $category = $_GET['category'] ?? 'all';
