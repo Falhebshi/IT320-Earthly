@@ -1,6 +1,15 @@
 <?php
 require_once 'db.php';
-require_once 'auth.php';
+
+session_start();
+if (isset($_SESSION['admin_id']) && ($_SESSION['role'] ?? '') === 'admin') {
+    $is_admin = true;
+} elseif (isset($_SESSION['user_id'])) {
+    $is_admin = false;
+} else {
+    header('Location: login.php');
+    exit;
+}
 
 $plant_id = $_GET['id'] ?? null;
 
@@ -633,12 +642,17 @@ $problems = $stmt->fetchAll();
     <nav id="navbar">
         <a href="index.html" class="nav-logo">Earthly</a>
         <div class="nav-right">
-            <a href="user-dashboard.php" class="nav-link">Dashboard</a>
+            <?php if ($is_admin): ?>
+                <a href="admin-dashboard.php" class="nav-link">Admin Dashboard</a>
+            <?php else: ?>
+                <a href="user-dashboard.php" class="nav-link">Dashboard</a>
+            <?php endif; ?>
             <a href="plant-catalog.php" class="nav-link active">Catalog</a>
             <a href="logout.php" class="btn btn-outline">Log out</a>
         </div>
     </nav>
 
+    <?php if (!$is_admin): ?>
     <div class="modal-overlay" id="addedModal">
         <div class="modal-box">
             <div class="modal-icon">✓</div>
@@ -653,6 +667,7 @@ $problems = $stmt->fetchAll();
             </div>
         </div>
     </div>
+    <?php endif; ?>
 
     <main class="page">
         <div class="bg-shape-1"></div>
@@ -811,10 +826,12 @@ $problems = $stmt->fetchAll();
                     </div>
 
                     <div class="detail-actions">
+                        <?php if (!$is_admin): ?>
                         <button type="button" class="btn btn-primary btn-lg" id="addBtn"
                             data-plant-id="<?= htmlspecialchars($plant['plant_id']) ?>">
                             Add to My Plants
                         </button>
+                        <?php endif; ?>
 
                         <a href="plant-catalog.php" class="btn btn-outline">Back to Catalog</a>
                     </div>
@@ -830,6 +847,7 @@ $problems = $stmt->fetchAll();
             document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 20);
         });
 
+        <?php if (!$is_admin): ?>
         const addBtn = document.getElementById('addBtn');
         const addedModal = document.getElementById('addedModal');
         const modalContinue = document.getElementById('modalContinue');
@@ -872,6 +890,7 @@ $problems = $stmt->fetchAll();
         modalContinue.addEventListener('click', () => {
             addedModal.classList.remove('visible');
         });
+        <?php endif; ?>
     </script>
 
 </body>

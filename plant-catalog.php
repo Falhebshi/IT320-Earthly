@@ -1,6 +1,15 @@
 <?php
 require_once 'db.php';
-require_once 'auth.php';
+
+session_start();
+if (isset($_SESSION['admin_id']) && ($_SESSION['role'] ?? '') === 'admin') {
+    $is_admin = true;
+} elseif (isset($_SESSION['user_id'])) {
+    $is_admin = false;
+} else {
+    header('Location: login.php');
+    exit;
+}
 
 $search = $_GET['search'] ?? '';
 $category = $_GET['category'] ?? 'all';
@@ -444,7 +453,11 @@ $plants = $stmt->fetchAll();
     <nav id="navbar">
         <a href="index.html" class="nav-logo">Earthly</a>
         <div class="nav-right">
-            <a href="user-dashboard.php" class="nav-link">Dashboard</a>
+            <?php if ($is_admin): ?>
+                <a href="admin-dashboard.php" class="nav-link">Admin Dashboard</a>
+            <?php else: ?>
+                <a href="user-dashboard.php" class="nav-link">Dashboard</a>
+            <?php endif; ?>
             <a href="plant-catalog.php" class="nav-link active">Catalog</a>
             <a href="logout.php" class="btn btn-outline">Log out</a>
         </div>

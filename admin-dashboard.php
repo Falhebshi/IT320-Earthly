@@ -420,6 +420,7 @@ $plantCount = $pdo->query("SELECT COUNT(*) FROM plant")->fetchColumn();
 
 		<div class="nav-right">
 			<a href="admin-dashboard.php" class="nav-link active">Admin Dashboard</a>
+			<a href="plant-catalog.php" class="nav-link">Catalog</a>
 			<a href="logout.php" class="btn btn-outline">Log out</a>
 		</div>
 	</nav>
